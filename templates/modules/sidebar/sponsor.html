@@ -1,9 +1,9 @@
 <div th:if="${theme.config.sponsor.showSponsor}" class="group relative w-full max-w-xs p-6 rounded-2xl 
             shadow-xl bg-gradient-to-br from-rose-100/40 via-amber-100/30 to-blue-100/30
             backdrop-blur-sm border border-white/50 hover:shadow-2xl transition-all
-            duration-300 hover:-translate-y-1 mx-auto md:mx-0">
+            duration-300 hover:-translate-y-1 mx-auto">
   <!-- 装饰元素 -->
-  <div class="absolute inset-0 overflow-hidden rounded-2xl">
+  <div class="absolute inset-0 overflow-hidden rounded-2xl bg-gradient-to-br from-pink-100/30 to-rose-100/30 dark:from-pink-900/20 dark:to-rose-900/20">
     <div class="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-pink-200/30 
                 blur-xl"></div>
     <div class="absolute -left-4 -bottom-4 h-16 w-16 rounded-full bg-amber-200/30 
@@ -15,7 +15,8 @@
     <!-- 标题 -->
     <div class="flex items-center gap-3 mb-6">
       <svg class="w-8 h-8 text-rose-400 drop-shadow-sm" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        <path
+          d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
       </svg>
       <h3 class="text-2xl font-bold bg-gradient-to-r from-rose-400 to-orange-400 
                 bg-clip-text text-transparent" th:text="${theme.config.sponsor.sponsorTitle}">
@@ -28,15 +29,11 @@
       <div th:each="sponsor : ${theme.config.sponsor.sponsorList}" class="flex justify-between items-center px-4 py-2 rounded-lg bg-white/20 
                  backdrop-blur-sm border border-white/30">
         <span class="font-medium text-stone-700 truncate mr-2">
-          <span th:text="${sponsor.icon}"> </span> 
+          <span th:text="${sponsor.icon}"> </span>
           <!-- 当url存在且不为空时添加链接，否则只显示文本 -->
-          <a th:if="${sponsor.url != null && sponsor.url != ''}" 
-             th:href="${sponsor.url}" 
-             target="_blank"
-             class="hover:text-rose-500 transition-colors duration-200"
-             th:text="${sponsor.name}">赞助档位</a>
-          <span th:unless="${sponsor.url != null && sponsor.url != ''}" 
-                th:text="${sponsor.name}">赞助档位</span>
+          <a th:if="${sponsor.url != null && sponsor.url != ''}" th:href="${sponsor.url}" target="_blank"
+            class="hover:text-rose-500 transition-colors duration-200" th:text="${sponsor.name}">赞助档位</a>
+          <span th:unless="${sponsor.url != null && sponsor.url != ''}" th:text="${sponsor.name}">赞助档位</span>
         </span>
         <span class="text-sm font-semibold bg-gradient-to-r from-rose-400 to-orange-300 
                     bg-clip-text text-transparent" th:text="${sponsor.amount}">
@@ -52,38 +49,32 @@
           ¥0
         </span>
       </div>
-      
-    <!-- 进度条 -->
-    <div class="relative h-3 rounded-full bg-white/30 mb-6 overflow-hidden">
-      <div class="absolute inset-0 rounded-full bg-gradient-to-r from-rose-300 
-                 to-rose-400 shadow-inner transition-all duration-500"
-           th:style="'width: ' + ${theme.config.sponsor.sponsorProgress} + '%'">
-        <div class="absolute right-0 -top-5 text-sm font-bold text-rose-500" 
-             th:text="${theme.config.sponsor.sponsorProgress} + '%'">0%</div>
-      </div>
-      <div class="absolute inset-0 rounded-full bg-white/20" 
-           th:if="${theme.config.sponsor.sponsorProgress} == 0"></div>
-      <div class="absolute inset-0 rounded-full bg-gradient-to-r from-rose-300 to-rose-400 shadow-inner" 
-           th:if="${theme.config.sponsor.sponsorProgress} == 100"></div>
-    </div>
 
-    <!-- 行动按钮 -->
-    <a th:href="${theme.config.sponsor.sponsorButtonLink}"
-       target="_blank"
-       class="block w-full py-3.5 rounded-xl bg-gradient-to-br from-rose-400 to-orange-300 
+      <!-- 进度条 -->
+      <div class="relative h-3 rounded-full bg-white/30 mb-6 overflow-hidden">
+        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-rose-300 to-rose-400 shadow-inner"
+          th:style="'width: ' + ${theme.config.sponsor.sponsorProgress} + '%'">
+          <div class="absolute right-0 -top-5 text-sm font-bold text-rose-500"
+            th:text="${theme.config.sponsor.sponsorProgress} + '%'">0%</div>
+        </div>
+      </div>
+
+      <!-- 行动按钮 -->
+      <a th:href="${theme.config.sponsor.sponsorButtonLink}" target="_blank" class="block w-full py-3.5 rounded-xl bg-gradient-to-br from-rose-400 to-orange-300 
               text-white font-semibold text-center shadow-lg hover:shadow-xl hover:from-rose-400 
               hover:to-rose-400 transition-all duration-300 transform hover:scale-[1.02] 
               active:scale-95 group-hover:[box-shadow:0_10px_20px_-5px_rgba(254,205,211,0.5)]"
-       th:text="${theme.config.sponsor.sponsorButtonText}">
-      成为赞助商
-    </a>
+        th:text="${theme.config.sponsor.sponsorButtonText}">
+        成为赞助商
+      </a>
 
-    <!-- 底部说明 -->
-    <p class="mt-4 text-xs text-text-base text-center leading-4" 
-       th:text="${#strings.replace(theme.config.sponsor.sponsorDescription, '\\n', '<br/>')}" 
-       th:utext="${#strings.replace(theme.config.sponsor.sponsorDescription, '\\n', '<br/>')}">
-      每笔赞助都会化作能量<br>
-      助力我们创作更多内容✨
-    </p>
+      <!-- 底部说明 -->
+      <p class="mt-4 text-xs text-text-base text-center leading-4"
+        th:text="${#strings.replace(theme.config.sponsor.sponsorDescription, '\\n', '<br/>')}"
+        th:utext="${#strings.replace(theme.config.sponsor.sponsorDescription, '\\n', '<br/>')}">
+        每笔赞助都会化作能量<br>
+        助力我们创作更多内容✨
+      </p>
+    </div>
   </div>
 </div>
