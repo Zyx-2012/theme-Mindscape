@@ -1,10 +1,10 @@
 # 主题简介
 
-本主题为Ideaflow主题（原版github：https://github.com/Idea-flow/theme-Ideaflow）的改编版（其实就是加了一点个人的创意和修复了一些我认为的bug）Mindscape
+本主题为Ideaflow主题（原版github： https://github.com/Idea-flow/theme-Ideaflow ）的改编版（其实就是加了一点个人的创意和修复了一些我认为的bug）Mindscape
 
 # 展示
 
-本主题无示例网站，但是我的博客（https://blog.zyx-2012.xyz/）用的是这个主题，可以直接进入我的博客当作示例网站。
+本主题无示例网站，但是我的博客（ https://blog.zyx-2012.xyz/ ）用的是这个主题，可以直接进入我的博客当作示例网站。
 原版主题（Ideaflow）的示例网站：https://halo.ideaflow.top/
 
 # 赞助
@@ -33,5 +33,7 @@
 # 最后
 
 我会经常不定期更新本主题（主要看有没有时间）
+
 经常在线，但是可能不看消息
-活跃度70%+
+
+有问题或建议直接在Issues中提出
