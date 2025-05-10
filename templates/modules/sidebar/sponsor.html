@@ -46,30 +46,25 @@
       <!-- 如果没有配置赞助者列表，显示默认内容 -->
       <div th:if="${#lists.isEmpty(theme.config.sponsor.sponsorList)}" class="flex justify-between items-center px-4 py-2 rounded-lg bg-white/20 
                  backdrop-blur-sm border border-white/30">
-        <span class="font-medium text-stone-700 truncate mr-2">🍬 糖果小精灵</span>
+        <span class="font-medium text-stone-700 truncate mr-2">暂无赞助商，点击下方按钮称为第一个吧~</span>
         <span class="text-sm font-semibold bg-gradient-to-r from-rose-400 to-orange-300 
                     bg-clip-text text-transparent">
-          ¥5-10
+          ¥0
         </span>
       </div>
-      <div th:if="${#lists.isEmpty(theme.config.sponsor.sponsorList)}" class="flex justify-between items-center px-4 py-2 rounded-lg bg-white/20 
-                 backdrop-blur-sm border border-white/30">
-        <span class="font-medium text-stone-700 truncate mr-2">🍭 匿名甜心</span>
-        <span class="text-sm font-semibold bg-gradient-to-r from-rose-400 to-orange-300 
-                    bg-clip-text text-transparent">
-          ¥1-5
-        </span>
-      </div>
-    </div>
-
+      
     <!-- 进度条 -->
-    <div class="relative h-3 rounded-full bg-white/30 mb-6">
+    <div class="relative h-3 rounded-full bg-white/30 mb-6 overflow-hidden">
       <div class="absolute inset-0 rounded-full bg-gradient-to-r from-rose-300 
                  to-rose-400 shadow-inner transition-all duration-500"
            th:style="'width: ' + ${theme.config.sponsor.sponsorProgress} + '%'">
         <div class="absolute right-0 -top-5 text-sm font-bold text-rose-500" 
              th:text="${theme.config.sponsor.sponsorProgress} + '%'">66%</div>
       </div>
+      <div class="absolute inset-0 rounded-full bg-white/20" 
+           th:if="${theme.config.sponsor.sponsorProgress} == 0"></div>
+      <div class="absolute inset-0 rounded-full bg-gradient-to-r from-rose-300 to-rose-400 shadow-inner" 
+           th:if="${theme.config.sponsor.sponsorProgress} == 100"></div>
     </div>
 
     <!-- 行动按钮 -->
@@ -80,15 +75,15 @@
               hover:to-rose-400 transition-all duration-300 transform hover:scale-[1.02] 
               active:scale-95 group-hover:[box-shadow:0_10px_20px_-5px_rgba(254,205,211,0.5)]"
        th:text="${theme.config.sponsor.sponsorButtonText}">
-      成为甜心赞助商
+      成为赞助商
     </a>
 
     <!-- 底部说明 -->
     <p class="mt-4 text-xs text-text-base text-center leading-4" 
        th:text="${#strings.replace(theme.config.sponsor.sponsorDescription, '\\n', '<br/>')}" 
        th:utext="${#strings.replace(theme.config.sponsor.sponsorDescription, '\\n', '<br/>')}">
-      每笔赞助都会化作甜蜜能量<br>
-      助力我们创作更多美好内容✨
+      每笔赞助都会化作能量<br>
+      助力我们创作更多内容✨
     </p>
   </div>
 </div>
