@@ -19,7 +19,7 @@
       </svg>
       <h3 class="text-2xl font-bold bg-gradient-to-r from-rose-400 to-orange-400 
                 bg-clip-text text-transparent" th:text="${theme.config.sponsor.sponsorTitle}">
-        甜蜜赞助者
+        赞助者
       </h3>
     </div>
 
@@ -28,7 +28,7 @@
       <div th:each="sponsor : ${theme.config.sponsor.sponsorList}" class="flex justify-between items-center px-4 py-2 rounded-lg bg-white/20 
                  backdrop-blur-sm border border-white/30">
         <span class="font-medium text-stone-700 truncate mr-2">
-          <span th:text="${sponsor.icon}">🍬</span> 
+          <span th:text="${sponsor.icon}"> </span> 
           <!-- 当url存在且不为空时添加链接，否则只显示文本 -->
           <a th:if="${sponsor.url != null && sponsor.url != ''}" 
              th:href="${sponsor.url}" 
@@ -59,7 +59,7 @@
                  to-rose-400 shadow-inner transition-all duration-500"
            th:style="'width: ' + ${theme.config.sponsor.sponsorProgress} + '%'">
         <div class="absolute right-0 -top-5 text-sm font-bold text-rose-500" 
-             th:text="${theme.config.sponsor.sponsorProgress} + '%'">66%</div>
+             th:text="${theme.config.sponsor.sponsorProgress} + '%'">0%</div>
       </div>
       <div class="absolute inset-0 rounded-full bg-white/20" 
            th:if="${theme.config.sponsor.sponsorProgress} == 0"></div>
