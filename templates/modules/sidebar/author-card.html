@@ -1,0 +1,174 @@
+<div
+  class="profile-card relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl transition-all duration-300 hover:shadow-2xl dark:from-gray-900/80 dark:to-gray-800/80 dark:shadow-gray-800/30"
+>
+  <!-- 毛玻璃背景效果 -->
+  <div class="absolute inset-0 z-0 bg-white/40 backdrop-blur-xl dark:bg-gray-800/30"></div>
+
+  <!-- 装饰性背景图案 -->
+  <div
+    class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 blur-2xl dark:from-blue-400/10 dark:to-purple-400/10"
+  ></div>
+  <div
+    class="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-gradient-to-br from-green-500/20 to-teal-500/20 blur-2xl dark:from-green-400/10 dark:to-teal-400/10"
+  ></div>
+
+  <!-- 内容区域 -->
+  <div class="relative z-10">
+    <!-- 头像区域 -->
+    <div class="mb-6 flex justify-center">
+      <div class="group relative">
+        <div
+          class="absolute -inset-0.5 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 opacity-75 blur transition duration-300 group-hover:opacity-100"
+        ></div>
+        <div class="relative">
+          <img
+            th:src="${theme.config.blogger.avatar ?: '/themes/theme-zyx2012/assets/img/default-avatar.png'}"
+            th:alt="${theme.config.blogger.nickname ?: site.title}"
+            class="h-24 w-24 rounded-full object-cover transition-transform duration-300 group-hover:scale-105 dark:border-gray-700"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- 个人信息区域 -->
+    <div class="mb-6 text-center">
+      <h2
+        class="mb-2 text-2xl font-bold text-gray-800 dark:text-white"
+        th:text="${theme.config.blogger.nickname ?: site.title}"
+      ></h2>
+    </div>
+
+    <!-- 个人简介 -->
+    <div class="mb-6" th:if="${theme.config.blogger.bio}">
+      <p class="text-center leading-relaxed text-gray-600 dark:text-gray-300" th:text="${theme.config.blogger.bio}"></p>
+    </div>
+
+    <!-- 统计信息 -->
+    <div class="mb-6 flex items-center justify-between" th:with="stats = ${siteStatsFinder.getStats()}">
+      <div
+        class="group relative flex flex-col items-center overflow-hidden rounded-xl bg-gradient-to-br from-blue-100/30 to-purple-100/30 px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:from-blue-900/20 dark:to-purple-900/20"
+      >
+        <div class="flex items-center">
+          <div class="text-blue-400 dark:text-blue-300">文章</div>
+          <!--          <svg class="h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+          <!--            <path-->
+          <!--              stroke-linecap="round"-->
+          <!--              stroke-linejoin="round"-->
+          <!--              stroke-width="2"-->
+          <!--              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"-->
+          <!--            />-->
+          <!--          </svg>-->
+          <!--          <div class="text-text-base" th:text="${stats.post}">0</div>-->
+        </div>
+
+        <div class="text-text-base" th:text="${stats.post}">0</div>
+      </div>
+
+      <div
+        class="group relative flex flex-col items-center overflow-hidden rounded-xl bg-gradient-to-br from-green-100/30 to-teal-100/30 px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:from-green-900/20 dark:to-teal-900/20"
+      >
+        <div class="flex items-center space-x-2">
+          <div class="text-green-400 dark:text-green-300">分类</div>
+          <!--          <svg class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+          <!--            <path-->
+          <!--              stroke-linecap="round"-->
+          <!--              stroke-linejoin="round"-->
+          <!--              stroke-width="2"-->
+          <!--              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"-->
+          <!--            />-->
+          <!--          </svg>-->
+          <!--          <div class="text-text-base" th:text="${stats.category}">0</div>-->
+        </div>
+
+        <div class="text-text-base" th:text="${stats.category}">0</div>
+      </div>
+
+      <div
+        class="group relative flex flex-col items-center overflow-hidden rounded-xl bg-gradient-to-br from-pink-100/30 to-rose-100/30 px-4 py-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:from-pink-900/20 dark:to-rose-900/20"
+      >
+        <div class="flex items-center space-x-2">
+          <div class="text-pink-400 dark:text-pink-300">标签</div>
+          <!--                    <svg class="h-5 w-5 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+          <!--                      <path-->
+          <!--                        stroke-linecap="round"-->
+          <!--                        stroke-linejoin="round"-->
+          <!--                        stroke-width="2"-->
+          <!--                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"-->
+          <!--                      />-->
+          <!--                    </svg>-->
+        </div>
+        <!--        <div class="mt-1 text-xs font-medium text-pink-600 dark:text-pink-300">标签</div>-->
+        <div class="text-text-base" th:text="${#lists.size(tagFinder.listAll())}">0</div>
+      </div>
+    </div>
+
+    <!-- 社交媒体链接 -->
+    <div class="mx-auto flex max-w-[300px] flex-wrap justify-center gap-4">
+      <th:block th:each="link : ${theme.config.blogger.social_links}">
+        <a
+          th:href="${link.url}"
+          target="_blank"
+          class="flex h-6 w-6 transform items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:scale-110 dark:text-gray-200"
+          th:title="${link.platform}"
+          th:utext="${link.icon}"
+        ></a>
+      </th:block>
+    </div>
+  </div>
+</div>
+
+<style>
+  .profile-card {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  /* 统计卡片悬停动画 */
+  .profile-card .group {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-origin: center;
+  }
+
+  .profile-card .group:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+
+  /* 深色模式优化 */
+  .dark .profile-card .group {
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  }
+
+  .dark .profile-card .group:hover {
+    box-shadow: 0 8px 32px rgba(255, 255, 255, 0.08);
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
+  }
+
+  /* 添加卡片悬停时的光晕效果 */
+  .profile-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at var(--x, 50%) var(--y, 50%),
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0) 50%
+    );
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .profile-card:hover::before {
+    opacity: 1;
+  }
+
+  /* 深色模式下的光晕效果 */
+  .dark .profile-card::before {
+    background: radial-gradient(
+      circle at var(--x, 50%) var(--y, 50%),
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 50%
+    );
+  }
+</style>

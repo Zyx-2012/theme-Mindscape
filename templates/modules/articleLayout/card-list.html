@@ -1,0 +1,111 @@
+<!-- 文章卡片列表 -->
+<article th:each="post : ${posts.items}" class="flex flex-col w-full p-2" style="flex: 1 1 100%; min-width: 100%;" data-media="(min-width: 640px) { flex: 1 1 50%; min-width: 50%; } (min-width: 768px) { flex: 1 1 33.33%; min-width: 33.33%; } (min-width: 1024px) { flex: 1 1 25%; min-width: 25%; } (min-width: 1280px) { flex: 1 1 20%; min-width: 20%; }">
+
+  <div class="rounded-lg overflow-hidden relative block cursor-pointer border border-gray-100 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-xl dark:border-gray-700 dark:bg-gray-800 flex flex-col h-full">
+    <a
+      th:href="${post.status.permalink}"
+
+    >
+      <!-- 封面图片 -->
+      <div class="relative flex aspect-[16/9] items-center justify-center overflow-hidden rounded-t-lg" style="aspect-ratio: 16/9; overflow: hidden;">
+        <!-- 置顶标识 -->
+        <div
+          th:if="${post.spec.pinned}"
+          class="absolute left-0 top-0 z-10  bg-gradient-to-r from-violet-500/90 to-purple-400/90 px-2 py-1 text-xs  rounded-br-lg text-white "
+        >
+          置顶
+        </div>
+
+        <th:block th:if="${not #strings.isEmpty(post.spec.cover)}">
+          <img
+            th:src="${post.spec.cover}"
+            th:alt="${post.spec.title}"
+            class="h-full w-full transform object-cover filter transition-all duration-500 ease-out group-hover:scale-110 group-hover:brightness-105 dark:brightness-75 dark:contrast-125"
+            style="aspect-ratio: 5/4; object-fit: cover;"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"
+          />
+          <div
+            class="flex hidden h-full w-full transform items-center justify-center bg-gradient-to-br from-blue-50 to-violet-50 transition-all duration-500 ease-out group-hover:scale-105 dark:from-gray-700 dark:to-gray-600"
+          >
+            <p
+              class="font-title text-center text-lg text-gray-600 transition-colors group-hover:text-primary dark:text-gray-300"
+            >
+              图片加载失败
+            </p>
+          </div>
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          ></div>
+        </th:block>
+        <th:block th:unless="${not #strings.isEmpty(post.spec.cover)}">
+          <div
+            class="flex h-full w-full transform items-center justify-center bg-gradient-to-br from-blue-50 to-violet-50 transition-all duration-500 ease-out group-hover:scale-105 dark:from-gray-700 dark:to-gray-600"
+          >
+            <p
+              class="font-title text-center text-lg text-gray-600 transition-colors group-hover:text-primary dark:text-gray-300"
+            >
+              此文章未设置图片
+            </p>
+          </div>
+        </th:block>
+      </div>
+
+      <!-- 文章内容 -->
+      <div class="bg-base-100 p-5">
+        <!-- 标题 -->
+        <h2
+          class="group-hover:text-primary-500 mb-3 truncate text-xl text-gray-900 transition-colors md:text-2xl dark:text-white"
+        >
+          <span th:text="${post.spec.title}"></span>
+        </h2>
+
+        <!-- 摘要 -->
+        <p class="mb-4 line-clamp-1 text-sm text-gray-600 dark:text-gray-400" th:text="${post.status.excerpt}"></p>
+
+        <!-- 元信息 -->
+        <div class="mb-4 flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
+          <!-- 发布时间 -->
+          <div class="flex items-center">
+            <span class="icon-[tabler--calendar] mr-1 h-4 w-4 opacity-70"></span>
+            <time th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"></time>
+          </div>
+
+          <!-- 浏览量 -->
+          <div class="flex items-center">
+            <span class="icon-[tabler--eye] mr-1 h-4 w-4 opacity-70"></span>
+            <span th:text="${post.stats.visit}"></span>
+          </div>
+
+          <!-- 评论数 -->
+          <div class="flex items-center">
+            <span class="icon-[tabler--message] mr-1 h-4 w-4 opacity-70"></span>
+            <span th:text="${post.stats.comment}"></span>
+          </div>
+        </div>
+
+        <!-- 标签列表 -->
+        <div class="flex flex-wrap gap-2">
+        <span
+          th:each="tag : ${post.tags}"
+          class="bg-primary-50 text-primary-600 dark:bg-primary-900/10 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-900/20 flex items-center rounded-full px-2 py-1 text-xs font-medium transition-colors"
+        >
+          <span class="icon-[tabler--tag] mr-1 h-3 w-3 opacity-70"></span>
+          <span th:text="${tag.spec.displayName}"></span>
+        </span>
+        </div>
+      </div>
+
+      <!-- 底部装饰线 -->
+      <div
+        class="absolute bottom-0 left-1/2 h-0.5 w-0 bg-gradient-to-r from-green-300 via-cyan-300 to-blue-300 transition-all duration-300 group-hover:left-0 group-hover:w-full dark:from-green-400 dark:via-cyan-400 dark:to-blue-400"
+      ></div>
+    </a>
+  </div>
+  
+
+</article>
+
+<!-- 空状态展示 -->
+<div th:if="${#lists.isEmpty(posts.items)}" class="col-span-full py-10 text-center text-gray-500 dark:text-gray-400">
+  暂无文章
+</div>

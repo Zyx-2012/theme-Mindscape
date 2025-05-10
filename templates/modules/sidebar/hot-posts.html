@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+  <th:block th:fragment="hot">
+    <section
+      class="relative mx-auto mt-6 max-w-[380px] overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 p-4 shadow-xl transition-all duration-300 hover:shadow-2xl dark:from-gray-900/80 dark:to-gray-800/80 dark:shadow-gray-800/30"
+    >
+      <!-- 毛玻璃背景效果 -->
+      <div class="absolute inset-0 z-0 bg-white/40 backdrop-blur-xl dark:bg-gray-800/40"></div>
+
+      <!-- 装饰性背景图案 -->
+      <div
+        class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 blur-2xl dark:from-blue-400/10 dark:to-purple-400/10"
+      ></div>
+      <div
+        class="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-gradient-to-br from-green-500/20 to-teal-500/20 blur-2xl dark:from-green-400/10 dark:to-teal-400/10"
+      ></div>
+
+      <!-- 内容区域 -->
+      <div class="relative z-10">
+        <!-- 标题栏 -->
+        <div class="mb-4 flex items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="text-primary-500 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+            />
+          </svg>
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white">热门文章</h2>
+        </div>
+
+        <!-- 文章列表 -->
+        <div class="space-y-4">
+          <th:block
+            th:with="posts = ${postFinder.list({
+          page: 1,
+          size: 5,
+          sort: {'stats.visit,desc', 'metadata.creationTimestamp,asc'}
+        })}"
+          >
+            <div
+              th:each="post,postStat : ${posts.items}"
+              class="group relative cursor-pointer overflow-hidden rounded-2xl transition-all duration-300 hover:bg-white/10 dark:hover:bg-gray-700/10"
+            >
+              <!-- 文章内容区域 -->
+              <div class="relative z-10 flex items-center gap-3 py-2">
+                <!-- 文章封面图/渐变背景 -->
+                <div class="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg">
+                  <!-- 序号标签 -->
+                  <div
+                    th:text="${postStat.index + 1}"
+                    class="absolute left-1 top-1 z-20 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r text-sm text-text-base"
+                    th:classappend="${postStat.index % 5 == 0 ? 'from-blue-500 to-indigo-500' : (postStat.index % 5 == 1 ? 'from-green-500 to-teal-500' : (postStat.index % 5 == 2 ? 'from-purple-500 to-pink-500' : (postStat.index % 5 == 3 ? 'from-amber-500 to-orange-500' : 'from-rose-500 to-red-500')))}"
+                  ></div>
+
+                  <div th:unless="${#strings.isEmpty(post.spec.cover)}" class="h-full w-full">
+                    <img
+                      th:src="${post.spec.cover}"
+                      class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                  </div>
+                  <div th:if="${#strings.isEmpty(post.spec.cover)}" class="h-full w-full">
+                    <img
+                      th:src="@{/assets/img/article-avatar.png}"
+                      class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                  </div>
+                </div>
+
+                <!-- 文章信息 -->
+                <div class="flex min-w-0 flex-grow flex-col justify-center">
+                  <h3
+                    class="group-hover:text-primary-500 dark:group-hover:text-primary-400 mb-0.5 truncate text-text-base transition-colors duration-300"
+                  >
+                    <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}"></a>
+                  </h3>
+                  <time
+                    class="text-xs text-gray-500 dark:text-gray-400"
+                    th:text="${#dates.format(post.metadata.creationTimestamp, 'yyyy-MM-dd')}"
+                  ></time>
+                </div>
+              </div>
+            </div>
+          </th:block>
+        </div>
+      </div>
+    </section>
+  </th:block>
+</html>

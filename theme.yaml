@@ -1,0 +1,39 @@
+apiVersion: theme.halo.run/v1alpha1
+kind: Theme
+metadata:
+  name: theme-Mindscape
+spec:
+  displayName: theme-Mindscape
+  author:
+    name: Mindscape
+    website: https://github.com/Idea-flow/theme-Ideaflow
+  description: Mindscape
+  logo: https://oss.6667000.xyz/theme-Ideaflow/logo.png
+  homepage: https://github.com/Idea-flow/theme-Ideaflow
+  repo: https://github.com/Idea-flow/theme-Ideaflow
+  issues: https://github.com/Idea-flow/theme-Ideaflow/issues
+  settingName: "theme-Mindscape-setting"
+  configMapName: "theme-Mindscape-configMap"
+  version: "1.0.0"
+  requires: ">=2.0.0"
+  license:
+    - name: "GPL-3.0"
+      url: "https://github.com/Idea-flow/theme-Ideaflow?tab=GPL-3.0-1-ov-file"
+  customTemplates:
+    page:
+      - name: 友情链接
+        description: 友情链接
+        screenshot:
+        file: links.html
+      - name: 图库
+        description: 图库
+        screenshot:
+        file: photos.html
+      - name: 瞬间
+        description: 瞬间
+        screenshot:
+        file: moments.html
+      - name: 素笺存忆
+        description: 素笺存忆
+        screenshot:
+        file: category_tag.html

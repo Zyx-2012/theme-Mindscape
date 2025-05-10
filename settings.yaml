@@ -1,0 +1,305 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: theme-Mindscape-setting
+spec:
+  forms:
+    - group: sponsor
+      label: 赞助者信息
+      formSchema:
+        - $formkit: checkbox
+          name: showSponsor
+          label: 显示赞助
+          value: false
+          help: "设置是否在侧边栏显示赞助信息"
+        - $formkit: text
+          name: sponsorTitle
+          label: 赞助标题
+          value: "甜蜜赞助者"
+          help: "设置赞助区域的标题"
+        - $formkit: repeater
+          name: sponsorList
+          label: 赞助者列表
+          value: []
+          help: "设置赞助者列表，可添加多个赞助档位"
+          children:
+            - $formkit: text
+              name: name
+              label: 赞助档位名称
+              value: ""
+              help: "赞助档位名称，如：糖果小精灵"
+              validation: required
+            - $formkit: text
+              name: amount
+              label: 赞助金额
+              value: ""
+              help: "赞助金额范围，如：¥5-10"
+              validation: required
+            - $formkit: text
+              name: icon
+              label: 图标
+              value: "🍬"
+              help: "赞助档位对应的图标，如：🍬"
+            - $formkit: url
+              name: url
+              label: 跳转链接
+              value: ""
+              help: "点击赞助者名称后跳转的链接，为空时不跳转"
+        - $formkit: number
+          name: sponsorProgress
+          label: 赞助进度
+          value: 66
+          min: 0
+          max: 100
+          help: "设置赞助进度百分比，范围0-100"
+        - $formkit: text
+          name: sponsorButtonText
+          label: 赞助按钮文案
+          value: "成为甜心赞助商"
+          help: "设置赞助按钮上的文字"
+        - $formkit: url
+          name: sponsorButtonLink
+          label: 赞助链接
+          value: ""
+          help: "设置点击赞助按钮后跳转的链接"
+        - $formkit: textarea
+          name: sponsorDescription
+          label: 底部说明文字
+          value: "每笔赞助都会化作甜蜜能量\n助力我们创作更多美好内容✨"
+          help: "设置赞助区域底部的说明文字"
+    - group: sidebar
+      label: 侧边栏配置
+      formSchema:
+        - $formkit: select
+          name: sidebarOrder
+          label: 侧边栏显示顺序
+          help: "设置侧边栏各模块的显示顺序以及是否显示，拖动选项可调整顺序"
+          multiple: true
+          sortable: true
+          options:
+            - label: 赞助信息
+              value: sponsor
+            - label: 博主信息
+              value: authorCard
+            - label: 随机视频
+              value: randomVideo
+            - label: 热门文章
+              value: hotPosts
+            - label: 标签
+              value: tagCloud
+    - group: common
+      label: 公共配置
+      formSchema:
+        - $formkit: attachment
+          name: favicon
+          label: 网站图标
+          value: ""
+          help: "设置网站图标，建议使用.ico格式"
+          accepts:
+            - "image/*"
+        - $formkit: repeater
+          name: backgroundVideos
+          label: PC端背景视频
+          value: []
+          max: 5
+          min: 0
+          help: "设置PC端背景视频，优先于背景图片显示"
+          children:
+            - $formkit: attachment
+              name: url
+              id: url
+              label: 视频
+              accepts:
+                - "video/*"
+        - $formkit: repeater
+          name: mobileBackgroundVideos
+          label: 移动端背景视频
+          value: []
+          max: 5
+          min: 0
+          help: "设置移动端背景视频，优先于背景图片显示"
+          children:
+            - $formkit: attachment
+              name: url
+              id: url
+              label: 视频
+              accepts:
+                - "video/*"
+        - $formkit: repeater
+          name: backgroundImgs
+          label: PC端背景大图
+          value: []
+          max: 5
+          min: 1
+          help: "当没有配置视频时显示PC端背景图片"
+          children:
+            - $formkit: attachment
+              name: url
+              id: url
+              label: 图片
+              accepts:
+                - "image/*"
+        - $formkit: repeater
+          name: mobileBackgroundImgs
+          label: 手机端背景大图
+          value: [ ]
+          max: 5
+          min: 1
+          help: "当没有配置手机端视频时显示手机端端背景图片"
+          children:
+            - $formkit: attachment
+              name: url
+              id: url
+              label: 图片
+              accepts:
+                - "image/*"
+        - $formkit: checkbox
+          name: isFullScreen
+          label: 头部大图or视频全屏
+          value: false
+          help: "设置头部大图or视频是否全屏显示"
+        - $formkit: checkbox
+          name: isFullScreenMobile
+          label: 移动端头部大图or视频全屏
+          value: false
+          help: "设置移动端头部大图or视频是否全屏显示"
+        - $formkit: checkbox
+          name: showStarryEffect
+          label: 显示星空效果
+          value: true
+          help: "设置是否显示星空特效"
+        - $formkit: checkbox
+          name: showRippleEffect
+          label: 显示波浪效果
+          value: true
+          help: "设置是否显示波浪特效"
+        - $formkit: checkbox
+          name: videoAutoPlay
+          label: 视频自动播放
+          value: true
+          help: "设置视频是否自动播放(浏览器限制,自动播放会静音,防止干扰用户)，关闭时会显示播放按钮"
+        - $formkit: text
+          name: mobileSidebarBgImage
+          label: 移动端菜单栏背景图
+          value: ""
+          help: "设置移动端菜单栏的背景图片，不设置则使用主题默认背景色,目前只支持完整格式的图片地址"
+          accepts:
+            - "image/*"
+        - $formkit: attachment
+          name: defaultAvatar
+          label: 默认头像
+          value: ""
+          help: "设置未登录用户header栏显示的默认头像"
+          accepts:
+            - "image/*"
+    - group: footer
+      label: 页脚配置
+      formSchema:
+        - $formkit: attachment
+          name: footerAnimalImage
+          label: 页脚动物装饰图
+          value: ""
+          help: "设置页脚动物装饰图片"
+          accepts:
+            - "image/*"
+        - $formkit: checkbox
+          name: showFooterAnimalImageOnMobile
+          label: 移动端显示动物装饰图
+          value: false
+          help: "设置是否在移动端显示页脚动物装饰图片"
+       
+        - $formkit: text
+          name: footerSlogan
+          label: 页脚标语
+          value: ""
+          help: "设置页脚显示的个性化标语"
+        - $formkit: text
+          name: contactEmail
+          label: 联系邮箱
+          value: ""
+          help: "设置联系邮箱地址"
+        - $formkit: text
+          name: contactText
+          label: 联系文本
+          value: "联系我"
+          help: "设置联系链接显示的文本"
+        - $formkit: text
+          name: supportText
+          label: 支持文本
+          value: ""
+          help: "设置网站支持信息文本"
+        - $formkit: url
+          name: supportLink
+          label: 支持链接
+          value: ""
+          help: "设置网站支持信息链接"
+        - $formkit: text
+          name: icp
+          label: 备案号
+          value: ""
+          help: "设置网站备案号"
+        - $formkit: url
+          name: icpLink
+          label: 备案链接
+          value: ""
+          help: "设置备案信息链接"
+        - $formkit: text
+          name: ga
+          label: 公安备案号
+          value: ""
+          help: "设置公安备案号"
+        - $formkit: url
+          name: gaLink
+          label: 备案链接
+          value: ""
+          help: "设置备案信息链接"
+        - $formkit: checkbox
+          name: useHaloFooterOnly
+          label: 仅使用Halo页脚
+          value: false
+          help: "设置是否仅使用Halo的页脚代码注入功能，启用后将不显示主题自带的页脚样式"
+
+    - group: blogger
+      label: 博主信息
+      formSchema:
+        - $formkit: attachment
+          name: avatar
+          label: 博主头像
+          value: ""
+          help: "设置博主头像，建议尺寸200x200"
+        - $formkit: text
+          name: nickname
+          label: 博主昵称
+          value: ""
+          help: "设置博主昵称，默认使用站点标题"
+        - $formkit: text
+          name: bio
+          label: 个人简介
+          value: ""
+          help: "一句话介绍自己"
+        - $formkit: text
+          name: location
+          label: 所在地
+          value: ""
+          help: "设置所在地，如：北京"
+        - $formkit: repeater
+          name: social_links
+          label: 社交链接
+          id: social_links
+          value: []
+          children:
+            - $formkit: text
+              name: platform
+              label: 平台
+              value: ""
+              validation: required
+            - $formkit: url
+              name: url
+              label: 链接
+              value: ""
+              validation: required
+            - $formkit: text
+              name: icon
+              label: 图标
+              value: ""
+              help: "使用SVG图标代码"

@@ -1,0 +1,63 @@
+<!-- 标签云 -->
+<div
+  class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl transition-all duration-300 hover:shadow-2xl dark:from-gray-900/80 dark:to-gray-800/80 dark:shadow-gray-800/30"
+>
+  <!-- 毛玻璃背景效果 -->
+  <div class="absolute inset-0 z-0 bg-white/40 backdrop-blur-xl dark:bg-gray-800/40"></div>
+
+  <!-- 装饰性背景图案 -->
+  <div
+    class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 blur-2xl dark:from-blue-400/10 dark:to-purple-400/10"
+  ></div>
+  <div
+    class="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-gradient-to-br from-green-500/20 to-teal-500/20 blur-2xl dark:from-green-400/10 dark:to-teal-400/10"
+  ></div>
+
+  <!-- 内容区域 -->
+  <div class="relative z-10">
+    <!-- 标题 -->
+    <h3 class="mb-4 flex items-center text-xl font-bold text-gray-800 dark:text-white">
+      <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"
+        ></path>
+      </svg>
+      标签云
+    </h3>
+
+    <!-- 标签云 -->
+    <div class="flex flex-wrap gap-2 " >
+      <a
+        th:each="tag : ${tagFinder.listAll()}"
+        th:href="${tag.status.permalink}"
+        th:text="${tag.spec.displayName}"
+        x-data="{
+          gradients: [
+            'from-blue-100 to-blue-200 ',
+            'from-teal-100 to-teal-200 ',
+            'from-purple-100 to-purple-200 ',
+            'from-rose-100 to-rose-200 ',
+            'from-amber-100 to-amber-200 ',
+            'from-indigo-100 to-indigo-200 ',
+            'from-green-100 to-green-200 ',
+            'from-sky-100 to-sky-200 ',
+            'from-gray-100 to-gray-200 ',
+            'from-slate-100 to-slate-200 '
+          ],
+          randomGradient: function() {
+            return this.gradients[Math.floor(Math.random() * this.gradients.length)];
+          }
+        }"
+        :class="randomGradient() + ' relative inline-flex transform items-center rounded-full bg-gradient-to-r px-3 py-1.5 text-sm text-gray-600 dark:text-gray-600 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:scale-105 hover:shadow-lg '"
+      >
+        <!-- 悬浮效果 -->
+        <div
+          class="absolute inset-0 rounded-full bg-white opacity-0 transition-opacity duration-300 group-hover:opacity-10 dark:bg-gray-100"
+        ></div>
+      </a>
+    </div>
+  </div>
+</div>

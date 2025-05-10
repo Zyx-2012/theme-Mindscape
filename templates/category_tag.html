@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{modules/layout :: html(content = ~{::content})}">
+  <th:block th:fragment="content">
+    <!-- Header -->
+    <th:block th:replace="~{modules/header :: header(isOverlayPage=false)}"></th:block>
+
+    <!-- 内容区域 -->
+    <div class="mx-auto max-w-7xl px-1 py-12 sm:px-2 lg:px-4">
+      <div class="flex justify-center">
+        <!-- 主要内容区域 -->
+        <div class="w-full max-w-4xl">
+          <!-- 统一的卡片容器 -->
+          <div
+            class="rounded-2xl border border-white/30 bg-gradient-to-br from-white/60 to-pink-50/60 p-8 shadow-lg dark:border-gray-700/30 dark:from-gray-800/60 dark:to-purple-900/40"
+          >
+            <!-- 分类展示区域 -->
+            <div class="mb-8">
+              <h2
+                class="mb-8 flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-800 dark:text-gray-100"
+              >
+                分类列表
+              </h2>
+              <div class="grid grid-cols-1 gap-6 sm:grid-cols-2" th:with="categories=${categoryFinder.listAll()}">
+                <div
+                  th:each="category : ${categories}"
+                  class="group relative cursor-pointer overflow-hidden rounded-xl border border-white/40 bg-gradient-to-br from-white/80 to-rose-50/80 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg dark:border-gray-700/40 dark:from-gray-800/80 dark:to-purple-900/60"
+                >
+                  <a th:href="@{${category.status.permalink}}" class="block p-6">
+                    <div class="flex items-center justify-between">
+                      <div class="relative">
+                        <span
+                          class="text-lg font-medium text-gray-800 transition-colors group-hover:text-rose-500 dark:text-gray-100 dark:group-hover:text-rose-400"
+                          th:text="${category.spec.displayName}"
+                        ></span>
+                        <!-- 底部渐变边框 -->
+                        <div
+                          class="absolute -bottom-1 left-0 h-[2px] w-full origin-center scale-x-0 bg-gradient-to-r from-transparent via-rose-400/60 to-transparent transition-transform duration-300 group-hover:scale-x-100"
+                        ></div>
+                      </div>
+                      <span
+                        class="rounded-full border border-rose-100/30 bg-white/50 px-3 py-1.5 text-sm font-medium text-gray-600 shadow-sm dark:border-gray-700/30 dark:bg-gray-800/50 dark:text-gray-300"
+                        th:text="${category.postCount} + ' 篇文章'"
+                      ></span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- 优雅的分隔线 -->
+            <div class="relative my-12">
+              <div class="absolute inset-0 flex items-center">
+                <div
+                  class="h-px w-full bg-gradient-to-r from-transparent via-rose-200 to-transparent dark:via-rose-500/40"
+                ></div>
+              </div>
+              <div class="relative flex justify-center">
+                <div class="flex items-center gap-2 bg-white px-4 dark:bg-gray-800">
+                  <div class="h-2 w-2 animate-pulse rounded-full bg-rose-300 dark:bg-rose-500/60"></div>
+                  <div class="h-2 w-2 animate-pulse rounded-full bg-purple-300 delay-100 dark:bg-purple-500/60"></div>
+                  <div class="h-2 w-2 animate-pulse rounded-full bg-blue-300 delay-200 dark:bg-blue-500/60"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 标签列表区域 -->
+            <div class="mb-12">
+              <h2
+                class="mb-8 flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-800 dark:text-gray-100"
+              >
+                标签列表
+              </h2>
+              <div class="flex flex-wrap gap-3 md:gap-4" th:with="tags=${tagFinder.listAll()}">
+                <div
+                  th:each="tag : ${tags}"
+                  class="group relative cursor-pointer rounded-xl border border-white/40 bg-gradient-to-br from-white/90 to-purple-50/90 px-4 py-2.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg dark:border-gray-700/40 dark:from-gray-800/90 dark:to-purple-900/70"
+                >
+                  <a th:href="@{${tag.status.permalink}}" class="flex items-center space-x-2">
+                    <!-- 标签图标 -->
+                    <span class="text-lg transition-transform duration-300 group-hover:scale-110">🔖</span>
+                    <div class="relative">
+                      <span
+                        class="font-medium text-gray-700 transition-colors group-hover:text-purple-600 dark:text-gray-200 dark:group-hover:text-purple-400"
+                      >
+                        <span th:text="${tag.spec.displayName}"></span>
+                        <span
+                          class="ml-2 rounded-full bg-white/50 px-2 py-0.5 text-sm font-normal text-gray-500 dark:bg-gray-800/50 dark:text-gray-400"
+                          th:text="'(' + ${tag.postCount} + ')'"
+                        ></span>
+                      </span>
+                      <!-- 底部渐变边框 -->
+                      <div
+                        class="absolute -bottom-1 left-0 h-[2px] w-full origin-center scale-x-0 bg-gradient-to-r from-transparent via-purple-400/60 to-transparent transition-transform duration-300 group-hover:scale-x-100"
+                      ></div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th:block>
+</html>

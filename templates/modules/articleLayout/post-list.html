@@ -1,0 +1,86 @@
+<div class="space-y-4">
+  <article
+    th:each="post : ${posts.items}"
+    class="group relative flex h-[190px] overflow-hidden rounded-lg sm:bg-black md:h-60 lg:h-52 xl:h-60 dark:bg-gray-900"
+  >
+    <!-- 左侧图片 (偶数索引) -->
+    <div
+      th:if="${postStat.index % 2 == 0}"
+      class="relative z-10 hidden min-w-[45%] scale-100 transform bg-cover bg-center bg-no-repeat transition-all duration-500 hover:scale-125 sm:block"
+      th:style="|clip-path: polygon(0 0, 100% 0, 90% 100%, 0 100%); background-image: url(${#strings.isEmpty(post.spec.cover) ? '/themes/theme-zyx2012/assets/img/article-avatar.png' : post.spec.cover})|"
+    ></div>
+
+    <!-- 文章信息区域 -->
+    <div class="relative z-20 w-full px-5 py-5 sm:w-[65%] sm:px-10 lg:px-5 xl:px-10">
+      <a th:href="${post.status.permalink}" class="flex h-full flex-col justify-between text-center sm:text-start">
+        <div>
+          <h3
+            class="hover:text-primary-500 relative mb-2 line-clamp-1 w-full overflow-hidden text-lg text-white transition-colors md:text-xl lg:text-[22px] xl:text-2xl"
+            th:text="${post.spec.title}"
+          ></h3>
+
+          <p
+            class="line-clamp-2 text-sm leading-7 text-gray-300 sm:indent-8 sm:text-[15px] xl:line-clamp-3"
+            th:text="${post.status.excerpt}"
+          ></p>
+        </div>
+
+        <!-- 文章元信息 -->
+        <div class="flex flex-wrap items-center justify-center gap-2 space-x-4 pt-5">
+          <!-- 发布时间 -->
+          <div class="flex items-center text-xs text-white">
+            <span class="mr-[3px] mt-[-2px] rounded-full p-1 text-[18px] text-white">
+              <span class="icon-[tabler--calendar] h-1.5 w-1.5"></span>
+            </span>
+            <time th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}"></time>
+          </div>
+
+          <!-- 浏览量 -->
+          <div class="flex items-center text-xs text-white">
+            <span class="mr-[3px] mt-[-2px] rounded-full p-1 text-[18px] text-white">
+              <span class="icon-[tabler--eye] h-1.5 w-1.5"></span>
+            </span>
+            <span th:text="${post.stats.visit}"></span>
+          </div>
+
+          <!-- 评论数 -->
+          <div class="flex items-center text-xs text-white">
+            <span class="mr-[3px] mt-[-2px] rounded-full p-1 text-[18px] text-white">
+              <span class="icon-[tabler--message] h-1.5 w-1.5"></span>
+            </span>
+            <span th:text="${post.stats.comment}"></span>
+          </div>
+
+          <!-- 标签列表 -->
+          <div class="scrollbar-hide flex items-center gap-2 overflow-x-auto">
+            <div
+              th:each="tag : ${post.tags}"
+              class="flex items-center whitespace-nowrap rounded-full bg-white bg-opacity-20 px-2 py-1 text-xs text-white transition-all duration-300 hover:bg-opacity-30"
+            >
+              <span
+                class="icon-[tabler--tag] mr-1 h-2 w-2 transition-colors duration-300 hover:text-indigo-500 dark:text-violet-300 dark:hover:text-violet-200"
+              ></span>
+              <span th:text="${tag.spec.displayName}"></span>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 模糊背景 -->
+    <div
+      class="absolute h-60 w-full bg-cover bg-center brightness-[0.8] sm:blur-[2.5rem] sm:brightness-[0.6] dark:brightness-[0.5]"
+      th:style="|background-image: url(${#strings.isEmpty(post.spec.cover) ? '/themes/theme-zyx2012/assets/img/article-avatar.png' : post.spec.cover})|"
+    ></div>
+
+    <!-- 右侧图片 (奇数索引) -->
+    <div
+      th:if="${postStat.index % 2 != 0}"
+      class="relative z-10 hidden min-w-[45%] scale-100 transform bg-cover bg-center bg-no-repeat transition-all duration-500 hover:scale-125 sm:block"
+      th:style="|clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%); background-image: url(${#strings.isEmpty(post.spec.cover) ? '/themes/theme-zyx2012/assets/img/article-avatar.png' : post.spec.cover})|"
+    ></div>
+  </article>
+
+  <!-- 空状态展示 -->
+  <div th:if="${#lists.isEmpty(posts.items)}" class="py-10 text-center text-gray-500 dark:text-gray-400">暂无文章</div>
+</div>

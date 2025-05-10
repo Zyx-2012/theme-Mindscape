@@ -1,0 +1,22 @@
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{modules/layout :: html(content = ~{::content})}">
+  <th:block th:fragment="content">
+    <!-- Header -->
+    <th:block th:replace="~{modules/header}"></th:block>
+
+    <th:block th:fragment="content"> 测试自定义page页面1 </th:block>
+
+    <!-- 主题切换悬浮按钮 -->
+    <div class="fixed bottom-4 right-4 z-[9999] block">
+      <!-- 主题切换按钮容器 -->
+      悬浮按钮page
+      <th:block th:replace="~{modules/common/theme-toggle}"></th:block>
+    </div>
+
+    <!-- 插入星空效果 -->
+    <th:block th:replace="~{modules/common/starry}"></th:block>
+  
+  </th:block>
+
+
+
+</html>

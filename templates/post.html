@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{modules/layout :: html(content = ~{::content})}">
+  <th:block th:fragment="content">
+    <!-- Header -->
+    <th:block th:replace="~{modules/header.html}"></th:block>
+
+    <!-- 大型头图区域 -->
+    <th:block th:replace="~{modules/common/post-img-background.html}"></th:block>
+
+    <div class="relative mx-auto flex w-full justify-center bg-base-100 px-4 md:px-6">
+      <!-- 左侧边栏区域 - 在手机端隐藏，平板和桌面端显示 -->
+      <div class="sticky top-24 hidden h-[calc(100vh-6rem)] w-[10%] overflow-y-auto lg:block">
+        <!--      左边-->
+        <!--        左边目录区域1-->
+      </div>
+
+      <!-- 文章内容区域 - 在手机端占满宽度，添加适当间距 -->
+      <div class="flex w-full max-w-[1920px] flex-col md:w-[80%] lg:w-[70%]">
+        <div>
+          <article id="articleContentId" class="article-content text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">
+            <th:block th:utext="${post.content.content}"></th:block>
+          </article>
+        </div>
+
+        <halo:comment group="content.halo.run" kind="Post" th:attr="name=${post.metadata.name}" />
+      </div>
+
+      <!-- 右侧目录区域 - 在手机和平板端隐藏，桌面端显示 -->
+      <div
+        class="sticky top-24 hidden h-[calc(100vh-6rem)] w-[20%] overflow-y-auto pl-4 text-left lg:block"
+        x-data="{
+        catalog: [],
+        expandedItems: [],
+        activeIndex: -1,
+        themeColor: '#22c55e',
+        collapsed: false,
+        theme: 'light',
+
+        init() {
+          this.buildCatalog();
+          this.initializeExpandedItems();
+          this.setupScrollListener();
+          this.setupMutationObserver();
+        },
+
+        buildCatalog() {
+          const container = document.getElementById('articleContentId');
+          if (!container) return;
+
+          const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
+          const catalogData = [];
+          const addedTitles = new Set();
+          let minLevel = 6;
+
+          Array.from(headings).forEach(heading => {
+            const level = parseInt(heading.tagName[1]);
+            minLevel = Math.min(minLevel, level);
+          });
+
+          Array.from(headings).forEach(heading => {
+            const text = heading.textContent.trim();
+            if (!addedTitles.has(text)) {
+              addedTitles.add(text);
+              const currentLevel = parseInt(heading.tagName[1]);
+              catalogData.push({
+                text,
+                level: currentLevel,
+                relativeLevel: currentLevel - minLevel + 1
+              });
+            }
+          });
+
+          this.catalog = catalogData;
+          this.initializeExpandedItems();
+        },
+
+        initializeExpandedItems() {
+          this.expandedItems = new Array(this.catalog.length).fill(!this.collapsed);
+        },
+
+        hasChildren(index, level) {
+          if (index === this.catalog.length - 1) return false;
+          let nextIndex = index + 1;
+          while (nextIndex < this.catalog.length && this.catalog[nextIndex].level > level) {
+            if (this.catalog[nextIndex].level === level + 1) return true;
+            nextIndex++;
+          }
+          return false;
+        },
+
+        shouldShowItem(index, level) {
+          if (level === 1) return true;
+          let parentIndex = index - 1;
+          while (parentIndex >= 0) {
+            const parentLevel = this.catalog[parentIndex].level;
+            if (parentLevel < level) {
+              if (!this.expandedItems[parentIndex]) return false;
+              level = parentLevel;
+            }
+            parentIndex--;
+          }
+          return true;
+        },
+
+        toggleExpand(index) {
+          this.expandedItems[index] = !this.expandedItems[index];
+        },
+
+        scrollToHeading(text) {
+          const container = document.getElementById('articleContentId');
+          if (!container) return;
+
+          const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
+          const targetHeading = Array.from(headings).find(heading => heading.textContent.trim() === text);
+
+          if (targetHeading) {
+            targetHeading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        },
+
+        setupScrollListener() {
+          let ticking = false;
+          window.addEventListener('scroll', () => {
+            if (!ticking) {
+              window.requestAnimationFrame(() => {
+                this.updateActiveHeading();
+                ticking = false;
+              });
+              ticking = true;
+            }
+          });
+        },
+
+        setupMutationObserver() {
+          const container = document.getElementById('articleContentId');
+          if (container) {
+            const observer = new MutationObserver(() => this.buildCatalog());
+            observer.observe(container, { childList: true, subtree: true });
+          }
+        },
+
+        updateActiveHeading() {
+          const container = document.getElementById('articleContentId');
+          if (!container) return;
+
+          const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
+          let currentHeading = null;
+          let minDistance = Infinity;
+
+          headings.forEach((heading) => {
+            const distance = Math.abs(heading.getBoundingClientRect().top);
+            if (distance < minDistance) {
+              minDistance = distance;
+              currentHeading = heading;
+            }
+          });
+
+          if (currentHeading) {
+            const headingText = currentHeading.textContent.trim();
+            const newActiveIndex = this.catalog.findIndex(item => item.text === headingText);
+            
+            if (newActiveIndex !== this.activeIndex) {
+              if (newActiveIndex !== -1) {
+                let currentIndex = newActiveIndex;
+                let currentLevel = this.catalog[currentIndex].level;
+                
+                for (let i = currentIndex - 1; i >= 0; i--) {
+                  if (this.catalog[i].level < currentLevel) {
+                    this.expandedItems[i] = true;
+                    currentLevel = this.catalog[i].level;
+                  }
+                }
+              }
+              
+              this.activeIndex = newActiveIndex;
+            }
+          } else {
+            this.activeIndex = -1;
+          }
+        }
+      }"
+        x-init="init()"
+      >
+        <div
+          x-show="catalog.length > 0"
+          class="catalog-container relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 p-6 shadow-xl transition-all duration-300 hover:shadow-2xl dark:from-#192433 dark:to-#192433 dark:shadow-gray-800/30"
+        >
+          <!-- 毛玻璃背景效果 -->
+          <div class="absolute inset-0 z-0 bg-white/40 backdrop-blur-xl dark:bg-gray-700/40"></div>
+
+          <!-- 装饰性背景图案 -->
+          <div
+            class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 blur-2xl dark:from-blue-400/10 dark:to-purple-400/10"
+          ></div>
+          <div
+            class="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-gradient-to-br from-green-500/20 to-teal-500/20 blur-2xl dark:from-green-400/10 dark:to-teal-400/10"
+          ></div>
+
+          <!-- 内容区域 -->
+          <div class="relative z-10">
+            <!-- 目录标题 -->
+            <div
+              class="catalog-title mb-0 flex items-center justify-between border-b border-gray-200/50 px-4 pb-2 dark:border-gray-700/50"
+            >
+              <span class="flex items-center gap-2 text-xl font-bold text-gray-800 dark:text-gray-100"> 📚 目录 </span>
+            </div>
+
+            <template x-for="(item, index) in catalog" :key="index">
+              <div
+                x-show="shouldShowItem(index, item.level)"
+                class="catalog-item group relative rounded-lg transition-all duration-300 ease-in-out hover:bg-gray-100/70 dark:hover:bg-gray-800/70"
+                :class="{ 'active': index === activeIndex }"
+                :style="{ paddingLeft: `${(item.relativeLevel - 1) * 1.5}rem` }"
+              >
+                <div class="item-header px-3 py-2">
+                  <!-- 折叠指示器 -->
+                  <div
+                    x-show="hasChildren(index, item.level)"
+                    class="hover:text-primary-500 dark:hover:text-primary-400 mr-2 flex h-4 w-4 cursor-pointer items-center justify-center text-gray-400 dark:text-gray-500"
+                    @click="toggleExpand(index)"
+                  >
+                    <svg
+                      class="h-3 w-3 transform transition-transform duration-300 ease-in-out"
+                      :class="{ 'rotate-90': expandedItems[index] }"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M7.293 4.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L10.586 9 7.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+
+                  <!-- 层级指示器 -->
+                  <div
+                    x-show="!hasChildren(index, item.level)"
+                    class="mr-2 h-1.5 w-1.5 rounded-full bg-gray-200 dark:bg-gray-700"
+                  ></div>
+
+                  <!-- 标题文本 -->
+                  <span
+                    class="item-text hover:text-primary-500 dark:hover:text-primary-400 transform cursor-pointer font-medium text-gray-600 transition-all duration-300 ease-in-out hover:translate-x-1 dark:text-gray-300"
+                    @click="scrollToHeading(item.text)"
+                    x-text="item.text"
+                  >
+                  </span>
+
+                  <!-- 悬停时显示的装饰线 -->
+                  <div
+                    class="absolute left-0 top-1/2 h-0 w-0.5 -translate-y-1/2 rounded-full transition-all duration-300 ease-in-out group-hover:h-full"
+                    :style="{ backgroundColor: themeColor + '80' }"
+                  ></div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <style>
+          .catalog-container {
+            width: 100%;
+            height: 500px;
+            max-height: calc(100vh - 2rem);
+            overflow-y: auto;
+            font-size: 0.9rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.1);
+          }
+
+          .catalog-title {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+          }
+
+          .catalog-title h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: -0.02em;
+          }
+
+          .catalog-item {
+            position: relative;
+            overflow: hidden;
+            margin: 0.25rem 0;
+          }
+
+          .item-header {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+          }
+
+          .item-text {
+            position: relative;
+            z-index: 1;
+            display: block;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            letter-spacing: -0.01em;
+            font-weight: 450;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          }
+
+          .catalog-item.active {
+            background-color: #34495e;
+            backdrop-filter: blur(4px);
+          }
+
+          .catalog-item.active .item-text {
+            font-weight: 500;
+            transform: translateX(0.25rem);
+          }
+
+          .catalog-item.active .item-text {
+            color: #e5e7eb;
+          }
+
+          .dark .catalog-item.active {
+            background-color: #34495e;
+          }
+
+          .dark .catalog-item.active .item-text {
+            color: #e5e7eb;
+          }
+
+          .catalog-container::-webkit-scrollbar {
+            width: 6px;
+          }
+
+          .catalog-container::-webkit-scrollbar-track {
+            background: transparent;
+          }
+
+          .catalog-container::-webkit-scrollbar-thumb {
+            background-color: rgba(156, 163, 175, 0.2);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+          }
+
+          .catalog-container::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(156, 163, 175, 0.4);
+          }
+
+          .dark .catalog-container::-webkit-scrollbar-thumb {
+            background-color: rgba(75, 85, 99, 0.2);
+          }
+
+          .dark .catalog-container::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(75, 85, 99, 0.4);
+          }
+
+          .dark {
+            color: #b0b0b0;
+          }
+
+          .dark .item-text:hover {
+            color: #e5e7eb;
+          }
+
+          .light {
+            color: #b0b0b0;
+          }
+
+          .light .item-text:hover {
+            color: #e5e7eb;
+          }
+        </style>
+      </div>
+    </div>
+
+    <!-- 将主题颜色应用到CSS变量 -->
+    <script>
+      document.addEventListener("alpine:initialized", () => {
+        const catalogContainer = document.querySelector(".catalog-container");
+        if (catalogContainer) {
+          const themeColor = Alpine.$data(catalogContainer.parentElement).themeColor;
+          // #ec4899 #22c55e #0ea5e9 #f43f5e
+
+          // document.documentElement.style.setProperty("--dynamic-theme-color", '#818cf8');
+          // document.documentElement.style.setProperty("--dynamic-theme-color",  document.documentElement.style.getPropertyValue("--primary"));
+          document.documentElement.style.setProperty("--dynamic-theme-color", "#22c55e");
+        }
+      });
+    </script>
+  </th:block>
+</html>

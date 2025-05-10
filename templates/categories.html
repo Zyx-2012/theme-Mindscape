@@ -1,0 +1,10 @@
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{modules/layout :: html(content = ~{::content})}">
+  <th:block th:fragment="content">
+    <!-- Header -->
+    <th:block th:replace="~{modules/header}"></th:block>
+
+    <ul>
+      <li th:replace="~{modules/category-tree :: single(categories=${categories})}" />
+    </ul>
+  </th:block>
+</html>
