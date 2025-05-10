@@ -12,7 +12,7 @@
         
         <!-- 赞助者 -->
         <div th:if="${component == 'sponsor' }">
-          <th:block th:replace="~{modules/sidebar/sponsor.html}"></th:block>
+          <th:block th:replace="~{modules/sidebar/sponsor.html}" th:if="${#strings.isEmpty(param.page)}"></th:block>
         </div>
         
         <!-- 博主信息 -->
