@@ -9,8 +9,19 @@
 
 # 赞助
 
-![84b3687aba52482601fcbfd11ba56ae](https://github.com/user-attachments/assets/d5bb4c6e-00d7-4b61-a915-31280d8db37d)
-![7c699b6e4c60ab6c3ed4b46fa94f3a1](https://github.com/user-attachments/assets/9a474fe3-c5d5-4e20-ad91-43eaacb10ce8)
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/4ae471d5-a5c1-4633-95bd-df0a4cbe8fd3" />
+      <sub>微信赞助</sub>
+    </td>
+    <td width="50"></td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/7cc0256c-0741-4a27-9954-bd2df2ca648e" />
+      <sub>支付宝赞助</sub>
+    </td>
+  </tr>
+</table>
 
 赞助将用于域名续费等基础运营（不用很多，一点心意就够）
 赞助者提出的需求/建议将获得 **最高优先级** 实现
