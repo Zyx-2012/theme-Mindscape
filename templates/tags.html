@@ -3,8 +3,33 @@
     <!-- Header -->
     <th:block th:replace="~{modules/header.html}"></th:block>
 
-    <ul>
-      <li th:each="tag : ${tags}" th:text="${tag.spec.displayName}" th:href="${tag.status.permalink}" />
-    </ul>
+    <!-- 大型头图区域 -->
+    <th:block th:replace="~{modules/common/img-background.html}"></th:block>
+
+    <div class="min-h-screen">
+      <div class="px-4 py-8 sm:px-6 lg:px-8">
+        <div class="animate-slide-up mx-auto max-w-4xl rounded-2xl p-6">
+          <div class="mb-12">
+            <h2 class="mb-8 flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
+              标签列表
+            </h2>
+            <div class="flex flex-wrap gap-3 md:gap-4">
+              <div th:each="tag : ${tags}" class="group relative cursor-pointer rounded-xl border border-white/40 bg-gradient-to-br from-white/90 to-purple-50/90 px-4 py-2.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg dark:border-gray-700/40 dark:from-gray-800/90 dark:to-purple-900/70">
+                <a th:href="${tag.status.permalink}" class="flex items-center space-x-2">
+                  <span class="text-lg transition-transform duration-300 group-hover:scale-110">🔖</span>
+                  <div class="relative">
+                    <span class="font-medium text-gray-700 transition-colors group-hover:text-purple-600 dark:text-gray-200 dark:group-hover:text-purple-400">
+                      <span th:text="${tag.spec.displayName}"></span>
+                      <span class="ml-2 rounded-full bg-white/50 px-2 py-0.5 text-sm font-normal text-gray-500 dark:bg-gray-800/50 dark:text-gray-400">(1)</span>
+                    </span>
+                    <div class="absolute -bottom-1 left-0 h-[2px] w-full origin-center scale-x-0 bg-gradient-to-r from-transparent via-purple-400/60 to-transparent transition-transform duration-300 group-hover:scale-x-100"></div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </th:block>
 </html>

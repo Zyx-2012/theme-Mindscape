@@ -1,7 +1,3 @@
-# 前言
-
-如果您觉得本主题对您有帮助请献出您手中免费的star谢谢，这是对我最大的支持及鼓励（当然赞助也是）
-
 # 主题简介
 
 本主题为Ideaflow主题（原版github： https://github.com/Idea-flow/theme-Ideaflow ）的改编版（其实就是加了一点个人的创意和修复了一些我认为的bug）Mindscape

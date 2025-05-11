@@ -1,39 +1,47 @@
 apiVersion: theme.halo.run/v1alpha1
 kind: Theme
 metadata:
-  name: theme-Mindscape
+  name: theme-zyx2012
 spec:
-  displayName: theme-Mindscape
+  displayName: theme-zyx2012
   author:
-    name: Mindscape
-    website: https://github.com/Idea-flow/theme-Ideaflow
-  description: Mindscape
+    name: Zyx_2012
+    website: https://github.com/Zyx-2012/theme-Mindscape
+  description: zyx2012
   logo: https://oss.6667000.xyz/theme-Ideaflow/logo.png
-  homepage: https://github.com/Idea-flow/theme-Ideaflow
-  repo: https://github.com/Idea-flow/theme-Ideaflow
-  issues: https://github.com/Idea-flow/theme-Ideaflow/issues
-  settingName: "theme-Mindscape-setting"
-  configMapName: "theme-Mindscape-configMap"
-  version: "1.0.0"
+  homepage: https://github.com/Zyx-2012/theme-Mindscape
+  repo: https://github.com/Zyx-2012/theme-Mindscape
+  issues: https://github.com/Zyx-2012/theme-Mindscape/issues
+  settingName: "theme-zyx2012-setting"
+  configMapName: "theme-zyx2012-configMap"
+  version: "1.0.1"
   requires: ">=2.0.0"
   license:
     - name: "GPL-3.0"
-      url: "https://github.com/Idea-flow/theme-Ideaflow?tab=GPL-3.0-1-ov-file"
+      url: "https://github.com/Zyx-2012/theme-Mindscape?tab=GPL-3.0-1-ov-file"
   customTemplates:
     page:
-      - name: 友情链接
-        description: 友情链接
-        screenshot:
-        file: links.html
-      - name: 图库
-        description: 图库
-        screenshot:
-        file: photos.html
+      # - name: 友情链接
+      #   description: 友情链接
+      #   screenshot:
+      #   file: links.html
       - name: 瞬间
         description: 瞬间
         screenshot:
         file: moments.html
-      - name: 素笺存忆
-        description: 素笺存忆
+      - name: 关于
+        description: 关于
         screenshot:
-        file: category_tag.html
+        file: about.html
+      - name: 历史归档
+        description: 历史归档
+        screenshot:
+        file: archives.html
+      - name: 文章分类
+        description: 文章分类
+        screenshot:
+        file: categories.html
+      - name: 文章标签
+        description: 文章标签
+        screenshot:
+        file: tags.html
