@@ -4,6 +4,7 @@ metadata:
   name: theme-zyx2012-setting
 spec:
   forms:
+    
     - group: sponsor
       label: 赞助者信息
       formSchema:
@@ -87,6 +88,7 @@ spec:
               value: hotPosts
             - label: 标签
               value: tagCloud
+
     - group: common
       label: 公共配置
       formSchema:
@@ -259,20 +261,20 @@ spec:
           value: false
           help: "设置是否仅使用Halo的页脚代码注入功能，启用后将不显示主题自带的页脚样式"
 
-    - group: blogger
-      label: 博主信息
+    - group: user_info
+      label: 用户信息
       formSchema:
         - $formkit: attachment
           name: avatar
-          label: 博主头像
+          label: 头像
           value: ""
-          help: "设置博主头像，建议尺寸200x200"
+          help: "设置用户头像，建议尺寸200x200"
         - $formkit: text
           name: nickname
-          label: 博主昵称
+          label: 昵称
           value: ""
-          help: "设置博主昵称，默认使用站点标题"
-        - $formkit: text
+          help: "设置用户昵称，默认使用站点标题"
+        - $formkit: textarea
           name: bio
           label: 个人简介
           value: ""
@@ -303,3 +305,4 @@ spec:
               label: 图标
               value: ""
               help: "使用SVG图标代码"
+    

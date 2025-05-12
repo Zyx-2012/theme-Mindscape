@@ -2,22 +2,20 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <!-- 侧边栏容器 -->
   <div class="space-y-8">
-<!--    <div th:text=" ${theme.config.sidebar.sidebarOrder}">-->
-<!--      dasg:-->
-<!--     -->
-<!--    </div>-->
     <!-- 遍历自定义顺序配置 -->
-    <th:block th:with="orderList = ${theme.config.sidebar.sidebarOrder != null ? theme.config.sidebar.sidebarOrder : {'authorCard', 'sponsor', 'randomVideo', 'hotPosts', 'tagCloud'}}">
+    <th:block th:with="orderList = ${theme.config.sidebar.sidebarOrder != null ? theme.config.sidebar.sidebarOrder : {'sponsor', 'authorCard', 'randomVideo', 'hotPosts', 'tagCloud'}}">
       <th:block th:each="component : ${orderList}">
         
-        <!-- 博主信息 -->
-        <div th:if="${component == 'authorCard' }">
-          <th:block th:replace="~{modules/sidebar/author-card}"></th:block>
-        </div>
+        
 
         <!-- 赞助者 -->
         <div th:if="${component == 'sponsor'}">
           <th:block th:replace="~{modules/sidebar/sponsor.html}"></th:block>
+        </div>
+
+        <!-- 博主信息 -->
+        <div th:if="${component == 'authorCard' }">
+          <th:block th:replace="~{modules/sidebar/author-card}"></th:block>
         </div>
         
         <!-- 随机视频 -->

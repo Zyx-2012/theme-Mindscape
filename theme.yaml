@@ -29,14 +29,7 @@ spec:
         description: 瞬间
         screenshot:
         file: moments.html
-      - name: 关于
-        description: 关于
-        screenshot:
-        file: about.html
-      - name: 历史归档
-        description: 历史归档
-        screenshot:
-        file: archives.html
+      
       - name: 文章分类
         description: 文章分类
         screenshot:
@@ -45,3 +38,10 @@ spec:
         description: 文章标签
         screenshot:
         file: tags.html
+      - name: 作者
+        description: 作者
+        screenshot:
+        file: author.html
+        route:
+          name: author
+          path: /author/{slug}
