@@ -1,0 +1,19 @@
+<section class="full moods fade-before">
+    <span>最近的心情能量</span>
+    <ul class="mood-list">
+        <div class="mood-line">
+            <em>愉快</em>
+            <i></i>
+            <em>沮丧</em>
+        </div>
+        <th:block th:each="post,iterstat : ${posts.items}"
+            th:with="mood = ${#annotations.getOrDefault(post, 'mindscape_post_mood','0')}">
+            <li th:class="|mood-${mood}|" th:if="${iterstat.index<5}">
+                <a role="button" target="_blank" class="no-icon has-line-clamp" th:href="@{${post.status.permalink}}">
+                    <th:block th:replace="~{modules/widgets/mood :: mood(${mood})}"></th:block>
+                    ，当时发表在「[[${post.spec.title}]]」
+                </a>
+            </li>
+        </th:block>
+    </ul>
+</section>

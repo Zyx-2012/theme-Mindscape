@@ -1,0 +1,6 @@
+<section class="count fade-before" th:with="authorStats = ${thyuuXingduPostFinder.getAuthorStats(author.metadata.name)}">
+    <h6>数据</h6>
+    <li>发表文章<span>[[${authorStats.post}]]篇</span></li>
+    <li>发表评论<span>[[${authorStats.comment}]]个</span></li>
+    <li>星球加热<span>[[${authorStats.visit}]]度</span></li>
+</section>

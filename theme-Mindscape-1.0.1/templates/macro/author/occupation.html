@@ -1,0 +1,6 @@
+<section class="occupation fade-before"
+         th:with="industry = ${#annotations.get(author, 'mindscape_user_industry')},occupation = ${#annotations.get(author, 'mindscape_user_occupation')}">
+    <h6>生涯</h6>
+    <li class="industry">行业<span th:text="${not #strings.isEmpty(industry) ? industry : '保密'}"></span></li>
+    <li class="occupation">职业<span th:text="${not #strings.isEmpty(occupation) ? occupation : '保密'}"></span></li>
+</section>

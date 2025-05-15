@@ -1,0 +1,84 @@
+<th:block
+    th:with="personality = ${#annotations.get(author, 'mindscape_user_personality')},personality_old = ${#annotations.get(author, 'mindscape_user_personality_old')}">
+    <section class="mbti column fade-before">
+        <input type="checkbox" id="nature" hidden>
+        <div class="nature">
+            <div th:class="|caption new ${personality}|">
+                <th:block th:if="${not #strings.isEmpty(personality)}">
+                    <img class="mbti-bg"
+                        th:src="|/themes/thyuu-xingdu/assets/files/personality/${personality}.svg|">
+                    <img class="mbti-mg"
+                        th:src="|/themes/thyuu-xingdu/assets/files/personality/${personality}.svg|">
+                    <span class="capt">
+                        <th:block th:switch="${personality}">
+                            <th:block th:case="'intj'">intj 建筑师</th:block>
+                            <th:block th:case="'intp'">intp 逻辑家</th:block>
+                            <th:block th:case="'entj'">entj 指挥官</th:block>
+                            <th:block th:case="'entp'">entp 辩论家</th:block>
+                            <th:block th:case="'infj'">infj 提倡者</th:block>
+                            <th:block th:case="'infp'">infp 调停者</th:block>
+                            <th:block th:case="'enfj'">enfj 主人公</th:block>
+                            <th:block th:case="'enfp'">enfp 竞选者</th:block>
+                            <th:block th:case="'istj'">istj 物流师</th:block>
+                            <th:block th:case="'isfj'">isfj 守卫者</th:block>
+                            <th:block th:case="'estj'">estj 总经理</th:block>
+                            <th:block th:case="'esfj'">esfj 执政官</th:block>
+                            <th:block th:case="'istp'">istp 鉴赏家</th:block>
+                            <th:block th:case="'isfp'">isfp 探险家</th:block>
+                            <th:block th:case="'estp'">estp 企业家</th:block>
+                            <th:block th:case="'esfp'">esfp 表演者</th:block>
+                        </th:block>
+                    </span>
+                    <div class="cont"></div>
+                </th:block>
+                <th:block th:unless="${not #strings.isEmpty(personality)}">
+                    <span class="capt">信息未填写</span>
+                </th:block>
+            </div>
+            <div th:class="|caption old ${personality_old}|">
+                <th:block th:if="${not #strings.isEmpty(personality_old)}">
+                    <img class="mbti-bg"
+                        th:src="|/themes/thyuu-xingdu/assets/files/personality/${personality_old}.svg|">
+                    <img class="mbti-mg"
+                        th:src="|/themes/thyuu-xingdu/assets/files/personality/${personality_old}.svg|">
+                    <span class="capt">
+                        <th:block th:switch="${personality_old}">
+                            <th:block th:case="'intj'">intj 建筑师</th:block>
+                            <th:block th:case="'intp'">intp 逻辑家</th:block>
+                            <th:block th:case="'entj'">entj 指挥官</th:block>
+                            <th:block th:case="'entp'">entp 辩论家</th:block>
+                            <th:block th:case="'infj'">infj 提倡者</th:block>
+                            <th:block th:case="'infp'">infp 调停者</th:block>
+                            <th:block th:case="'enfj'">enfj 主人公</th:block>
+                            <th:block th:case="'enfp'">enfp 竞选者</th:block>
+                            <th:block th:case="'istj'">istj 物流师</th:block>
+                            <th:block th:case="'isfj'">isfj 守卫者</th:block>
+                            <th:block th:case="'estj'">estj 总经理</th:block>
+                            <th:block th:case="'esfj'">esfj 执政官</th:block>
+                            <th:block th:case="'istp'">istp 鉴赏家</th:block>
+                            <th:block th:case="'isfp'">isfp 探险家</th:block>
+                            <th:block th:case="'estp'">estp 企业家</th:block>
+                            <th:block th:case="'esfp'">esfp 表演者</th:block>
+                        </th:block>
+                    </span>
+                    <div class="cont"></div>
+                </th:block>
+                <th:block th:unless="${not #strings.isEmpty(personality_old)}">
+                    <span class="capt">信息未填写</span>
+                </th:block>
+            </div>
+            <ul class="traits">
+                <li class="extraverted"><em>外向</em><i></i><em>内向</em></li>
+                <li class="intuitive"><em>远见</em><i></i><em>现实</em></li>
+                <li class="feeling"><em>理性</em><i></i><em>感受</em></li>
+                <li class="judging"><em>评判</em><i></i><em>展望</em></li>
+                <li class="assertive"><em>坚决</em><i></i><em>起伏</em></li>
+            </ul>
+        </div>
+        <li class="info">
+            <a href="//www.16personalities.com/" target="_blank">了解更多信息</a>
+            <label th:if="${not #strings.isEmpty(personality_old)}" for="nature" class="nature-button"
+                role="button"><a></a></label>
+        </li>
+    </section>
+</th:block>

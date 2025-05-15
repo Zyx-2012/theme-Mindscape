@@ -1,0 +1,6 @@
+<section class="identity fade-before"
+         th:with="life_role = ${#annotations.get(author, 'mindscape_user_life_role')},social_role = ${#annotations.get(author, 'mindscape_user_social_role')}">
+    <h6>人生</h6>
+    <li>生活角色<span th:text="${not #strings.isEmpty(life_role) ? life_role : '保密'}"></span></li>
+    <li>社会角色<span th:text="${not #strings.isEmpty(social_role) ? social_role : '保密'}"></span></li>
+</section>

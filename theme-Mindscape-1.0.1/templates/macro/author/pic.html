@@ -1,0 +1,11 @@
+<section class="user-pic" th:if="${not #strings.isEmpty(user_main_pic) && not #strings.isEmpty(user_back_pic)}">
+    <th:block th:if="${not #strings.isEmpty(site.url)}">
+        <th:block
+            th:with="site_url = ${#strings.startsWith(site.url, 'https://') ? (#strings.replace(site.url, 'https://', '')) : (#strings.startsWith(site.url, 'http://') ? #strings.replace(site.url, 'http://', '') : site.url)}">
+            <div class="text" th:domain="${#strings.replace(site_url, '/', '')}"></div>
+        </th:block>
+    </th:block>
+
+    <img class="back" th:src="${user_back_pic}">
+    <img class="main" th:src="${user_main_pic}">
+</section>

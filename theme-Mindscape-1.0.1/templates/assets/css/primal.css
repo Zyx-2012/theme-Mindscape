@@ -1,0 +1,122 @@
+@charset "utf-8";
+
+/* =ROOT
+-------------------------------------------------------------- */
+:root {
+	/* 色调 */
+	--main-color:			var(--custom-main-hue, 0deg) var(--custom-main-sat, 70%) var(--custom-main-lig, 70%);
+	--subs-color:			var(--custom-subs-hue, 20deg) var(--custom-subs-sat, 70%) var(--custom-subs-lig, 70%);
+
+	/* 字块 */
+	--font-color: 			0deg 0% 20%;
+	--font-alpha: 			100%;
+	--s-color: 				hsl(var(--font-color) / var(--font-alpha));
+	--f-color: 				hsl(0deg 0% 100% / .9);
+	--font-size-normal: 	var(--custom-font-size, 16px);
+	--font-size-medium: 	.875rem;
+	--font-size-small: 		.75rem;
+	--font-size-title: 		1rem;
+	--font-weight-normal: 	400;
+	--font-weight-title: 	600;
+	--font-family: 			var(--custom-fonts, none), 'Misans VF', 'PingFang SC', sans-serif, iconfont;
+	--font-family-slogn: 	var(--custom-slogn, none), '快看世界体', var(--font-family);
+	--font-family-coder: 	var(--custom-coder, none), 'Monaco', 'Consolas', var(--font-family);
+	--font-family-title: 	var(--font-family);
+	--text-shadow: 			0 .04rem .2rem rgb(0 0 0 / 30%);
+
+	/* 距离 */
+	--nav-height: 			4rem;
+	--sticky-top: 			var(--nav-height);
+	--edge-tb: 				var(--nav-height);
+	--edge-lr: 				3rem;
+	--gap-area: 			3rem;
+	--gap-divs: 			1.5rem;
+	--gap-span: 			1rem;
+
+	/* 区块 */
+	--radius: 				var(--custom-radius, var(--font-size-normal));
+	--icon-size: 			1.25rem;
+	--card-size: 			22.5rem;
+	--card-mini: 			13.5rem;
+	--medium-size:			1152px;
+	--content-size:			var(--custom-content-size, 62.5rem);
+	--scroll-size:			12px;
+	--scroll-mask:			linear-gradient(#0000, #000 var(--gap-divs), #000 calc(100% - var(--gap-divs)), #0000);
+	--scroll-mask-x:		linear-gradient(90deg,#0000, #000 var(--gap-divs), #000 calc(100% - var(--gap-divs)), #0000);
+	--scroll-color:			hsl(var(--main-color) / 30%);
+	--border: 				thin solid hsl(var(--font-color) / 5%);
+	--bg: 					hsl(var(--font-color) / 5%);
+	--h-bg: 				hsl(0deg 0% 98%);
+	--w-bg: 				hsl(0deg 0% 100%);
+	--n-bg: 				transparent;
+	--box-shadow: 			0 .2rem 1rem 0 hsl(0deg 0% 15% / 10%);
+	--box-shadow-white: 	0 .2rem 1rem 0 hsl(0deg 0% 15% / 4%);
+	--box-shadow-color: 	var(--box-shadow), 0 2rem 2rem -2rem hsl(var(--main-color) / 30%);
+	--cover-top: 			var(--nav-height);
+	--cover-size: 			85vh;
+	--cover-align: 			var(--custom-cover-align,center);
+
+	/* 动画 */
+	--animation-on:			cubic-bezier(.6, .1, 0, 1);
+	--animation-in:			cubic-bezier(.6, .2, .25, 1);
+	--animation: 			opacity .5s var(--animation-in) backwards, transform 1s var(--animation-in) backwards, filter .7s var(--animation-in);
+
+	/* WP重置 */
+	--wp--preset--font-size--small: .75em;
+	--wp--preset--font-size--medium: 1.75em;
+	--wp--preset--font-size--large: 2em;
+	--wp--preset--font-size--x-large: 3em;
+}
+@media (max-width: 1152px) {
+	:root {
+		--edge-lr:				1.5rem;
+		--cover-top:			max(10em, 30vh);
+		--cover-size:			auto;
+	}
+}
+@media (max-width: 641px) {
+	:root {
+		--sticky-top:			1rem;
+		--scroll-size:			0rem;
+	}
+}
+@view-transition {
+	navigation: auto;
+}
+/* 夜间模式 */
+:root[theme=dark] {
+	--font-color: 			214deg 15% 80%;
+	--h-bg: 				hsl(214deg 64% 6%);
+	--w-bg: 				hsl(214deg 64% 12%);
+	--s-bg: 				hsl(214deg 64% 12% / 60%);
+
+	--font-color:			var(--custom-main-hue, 214deg) 5% 80%;
+	--h-bg:					hsl(var(--custom-main-hue, 214deg) 5% 5%);
+	--w-bg:					hsl(var(--custom-main-hue, 214deg) 5% 10%);
+	--s-bg:					hsl(var(--custom-main-hue, 214deg) 5% 20% / 20%);
+
+	--f-color:				var(--h-bg);
+}
+:root body.nav-fixed {
+	--nav-height:			3rem;
+}
+/* 附加属性 */
+:root body.single:not(.nav-fixed, .single-format-image, .single-format-gallery) {
+	--s-color: 				hsl(0deg 0% 100% / .9);
+	--f-color: 				hsl(0deg 0% 0% / .7);
+	--logo-color: 			var(--s-color);
+}
+:root :where(body.dark-page),
+:root:has(body.dark-page) {
+	--logo-color:			0deg 0% 100%;
+	--font-color:			0deg 0% 100%;
+	--font-alpha:			75%;
+	--bg:					hsl(0deg 0% 60% / .05);
+	--h-bg:					hsl(0deg 0% 0%);
+	--w-bg:					hsl(0deg 0% 60% / .1);
+	--s-bg:					hsl(0deg 0% 60% / .1);
+	--layout-bg:			none;
+	--f-color:				var(--h-bg);
+	--s-color:				hsl(0deg 0% 100% / .9);
+	--s-box-shadow:			var(--box-shadow-white);
+}

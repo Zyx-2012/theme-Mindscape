@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- 文章封面图背景组件 -->
+
+  <div th:fragment="img-background" class="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
+    <!-- 背景图片 -->
+    <div
+      class="absolute inset-0 flex items-center justify-center bg-cover bg-center bg-no-repeat transition-transform duration-1000"
+    >
+      <div class="h-full w-full object-cover">
+        <img
+          th:if="${post != null && post.spec.cover != null}"
+          th:src="${post.spec.cover}"
+          class="h-full w-full object-cover"
+        />
+        <img
+          th:unless="${post != null && post.spec.cover != null}"
+          th:if="${not #lists.isEmpty(theme.config.common.backgroundImgs)}"
+          th:with="randomIndex=${T(java.lang.Math).floor(T(java.lang.Math).random() * #lists.size(theme.config.common.backgroundImgs))}"
+          th:src="${theme.config.common.backgroundImgs[randomIndex].url}"
+          class="h-full w-full object-cover"
+        />
+        <img
+          th:unless="${(post != null && post.spec.cover != null) || not #lists.isEmpty(theme.config.common.backgroundImgs)}"
+          th:src="@{/assets/img/imbg.avif}"
+          class="h-full w-full object-cover"
+        />
+      </div>
+
+      <!-- 暗黑模式遮罩层 -->
+      <div class="bg-black/1 absolute inset-0 transition-opacity duration-300 dark:bg-black/40"></div>
+
+      <!-- 文章信息栏 -->
+      <div class="absolute bottom-0 left-0 w-full p-6 md:w-2/3 lg:w-1/2">
+        <!-- 文章标题 -->
+        <h1
+          class="mb-4 line-clamp-2 text-2xl font-bold text-white drop-shadow-lg md:text-3xl lg:text-4xl"
+          th:text="${post.spec.title}"
+        ></h1>
+
+        <!-- 辅助信息行 -->
+        <div class="flex flex-wrap gap-4 text-sm text-white/90">
+          <!-- 作者信息 -->
+          <div class="flex items-center space-x-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-blue-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-white" th:text="${post.spec.owner}">作者</span>
+          </div>
+
+          <!-- 阅读量 -->
+          <div class="flex items-center space-x-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-green-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+              <path
+                fill-rule="evenodd"
+                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span class="text-white" th:text="${post.stats.visit}">阅读量</span>
+          </div>
+
+          <!-- 发布时间 -->
+          <div class="flex items-center space-x-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-purple-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <span class="text-white" th:text="${#dates.format(post.spec.publishTime, 'yyyy-MM-dd')}">发布时间</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 插入星空效果 -->
+    <th:block th:replace="~{modules/common/starry}"></th:block>
+  </div>
+</html>

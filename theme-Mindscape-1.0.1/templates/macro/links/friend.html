@@ -1,0 +1,201 @@
+<main id="main" class="site-main" role="main" th:with="groups = ${friendFinder.linkGroupBy()}">
+    <header class="page-header">
+        <h1 class="page-title fade-before">[[${theme.config.links.title}]]<em class="num">[[${thyuuXingduLinkFinder.count}]]个</em></h1>
+        <div class="taxonomy-des fade-before" th:if="${not #strings.isEmpty(theme.config.links.description)}">
+            <p th:text="${theme.config.links.description}"></p>
+        </div>
+        <nav class="taxonomy-nav fade-before">
+            <ul class="taxonomy-sub no-scrollbar card-sub active">
+                <th:block th:each="group,iterStat : ${groups}">
+                    <li th:if="${not #lists.isEmpty(group.spec.displayName)}">
+                        <a data-fancybox="div"
+                           th:data-src="'#'+${group.metadata.name}"
+                           th:data-slug="${group.metadata.name}"
+                           title="人间烟火">[[${group.spec.displayName}]] <span class="taxonomy-num">([[${group.links.size}]])</span></a>
+                    </li>
+                </th:block>
+            </ul>
+        </nav>
+    </header>
+    <article class="friend-tab page type-page hentry">
+        <section class="friend-link">
+            <th:block th:each="group,iterStat : ${groups}">
+                <div th:id="${group.metadata.name}"
+                     th:if="${#strings.equals(#annotations.get(group, 'mindscape_link_group_display_style'),'rss') && not #lists.isEmpty(group.links)}"
+                     class="linkcat">
+                    <hgroup class="link-nav">
+                        <h6 class="page-section-title" th:if="${not #lists.isEmpty(group.spec.displayName)}"
+                            th:text="${group.spec.displayName}"></h6>
+                        <th:block th:with="desc = ${#annotations.get(group, 'mindscape_link_group_desc')}">
+                            <span th:if="${not #lists.isEmpty(desc)}" th:text="${desc}"></span>
+                        </th:block>
+                    </hgroup>
+                    <ul class="link-items">
+                        <th:block th:each="link,iterStat : ${group.links}"
+                                  th:with="rss_uri = ${#annotations.get(link, 'rss_uri')},
+                                  rating = ${#conversions.convert(#annotations.getOrDefault(link, 'mindscape_link_rating', '0'), 'java.lang.Integer')},
+                                  distance = ${11-rating},distanceText = ${distance < 11 ? ('距离'+distance+'光年') : '该星球距离检测中'}">
+                            <li th:if="${#lists.isEmpty(link.friendPosts)}" th:id="${link.metadata.name}" class="link-item fade-before" th:rating="${rating}"
+                            >
+                                <a class="link-card" th:href="${link.spec.url}"
+                                   th:title="${link.spec.description}" target="_blank" role="button">
+                                    <img th:alt="${link.spec.description}"
+                                         th:src="${'https://s0.wp.com/mshots/v1/'+link.spec.url+'?w=400&h=300'}"
+                                         class="link-bg" loading="lazy">
+                                    <div class="link-info">
+                                        <img alt="" th:src="${link.spec.logo}"
+                                             class="avatar avatar-48 photo" height="48" width="48"
+                                             decoding="async">
+                                        <div class="link-cont">
+                                            <h6 class="link-name"
+                                                th:text="${link.spec.displayName}"></h6>
+                                            <div class="link-des" th:text="${link.spec.description}"></div>
+                                        </div>
+                                    </div>
+                                    <div class="note-time">
+<!--                                        [[${theme.config.global.site_start_text}]]第[[${index}]]号恒星-->
+                                        <br>
+                                        [[${distanceText}]]
+                                    </div>
+                                </a>
+                                <div class="link-rss">
+                                    <div class="rss-no rss-list" >
+                                        <th:block th:if="${#strings.isEmpty(rss_uri)}">
+                                            无 RSS 链接
+                                        </th:block>
+                                        <th:block th:unless="${#strings.isEmpty(rss_uri)}">
+                                            <th:block th:unless="${link.rssFeedSyncLog == null}">
+                                                [[${link.rssFeedSyncLog.failureMessage}]]
+                                            </th:block>
+                                            <th:block th:if="${link.rssFeedSyncLog == null}">
+                                                待同步
+                                            </th:block>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </li>
+                            <li th:unless="${#lists.isEmpty(link.friendPosts)}"
+                                th:with="friendPosts = ${link.friendPosts}"
+                                th:id="${link.metadata.name}" class="link-item fade-before" th:rating="${rating}">
+                                <a class="link-card" th:href="${link.spec.url}"
+                                   th:title="${link.spec.description}" target="_blank" role="button">
+                                    <img th:alt="${link.spec.description}"
+                                         th:src="${'https://s0.wp.com/mshots/v1/'+link.spec.url+'?w=400&h=300'}"
+                                         class="link-bg" loading="lazy">
+                                    <div class="link-info">
+                                        <img alt="" th:src="${link.spec.logo}"
+                                             class="avatar avatar-48 photo" height="48" width="48"
+                                             decoding="async">
+                                        <div class="link-cont">
+                                            <h6 class="link-name"
+                                                th:text="${link.spec.displayName}"></h6>
+                                            <div class="link-des" th:text="${link.spec.description}"></div>
+                                        </div>
+                                    </div>
+                                    <div class="note-time">
+<!--                                        [[${theme.config.global.site_start_text}]]第[[${index}]]号恒星-->
+                                        <br>
+                                        <th:block th:with="days=${(new java.util.Date().getTime()-friendPosts[0].spec.pubDate.toEpochMilli())/3600000}"
+                                                  th:text="${days<= 24 ? '24小时内检测到电波' : distanceText}">
+                                        </th:block>
+                                    </div>
+                                </a>
+                                <div class="link-rss">
+                                    <th:block th:each="friendPost,iterStat : ${friendPosts}"
+                                              th:with="days=${(new java.util.Date().getTime()-friendPost.spec.pubDate.toEpochMilli())/3600000}">
+                                        <a class="rss-list "
+                                           th:classappend="${days<= 24 ? 'new' : '' }"
+                                           th:href="${friendPost.spec.postLink}"
+                                           th:title="${friendPost.spec.title}" target="_blank" role="button">
+                                            <time class="rss-date">
+                                                <span th:text="${days<= 24 ? '24小时' : #dates.format(friendPost.spec.pubDate,'yyyy/MM/dd')}"></span>
+                                            </time>
+                                            <div class="rss-name" th:text="${friendPost.spec.title}"></div>
+                                        </a>
+                                    </th:block>
+                                </div>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+                <div th:id="${group.metadata.name}"
+                     th:if="${#strings.equals(#annotations.get(group, 'mindscape_link_group_display_style'),'default') && not #lists.isEmpty(group.links)}"
+                     class="linkcat">
+                    <hgroup class="link-nav">
+                        <h6 class="link-title" th:if="${not #lists.isEmpty(group.spec.displayName)}"
+                            th:text="${group.spec.displayName}"></h6>
+                        <th:block th:with="desc = ${#annotations.get(group, 'mindscape_link_group_desc')}">
+                            <span th:if="${not #lists.isEmpty(desc)}" th:text="${desc}"></span>
+                        </th:block>
+                    </hgroup>
+                    <ul class="link-items">
+                        <li th:each="link,iterStat : ${group.links}" th:id="${link.metadata.name}"
+                            th:with="rating = ${#annotations.getOrDefault(link, 'mindscape_link_rating', '0')}"
+                            class="link-item"
+                            th:rating="${rating}">
+                            <a class="link-card" th:href="${link.spec.url}"
+                               th:title="${link.spec.description}" target="_blank" role="button">
+                                <img th:alt="${link.spec.description}"
+                                     th:src="${'https://s0.wp.com/mshots/v1/'+link.spec.url+'?w=400&h=300'}"
+                                     class="link-bg" loading="lazy">
+                                <div class="link-info">
+                                    <img class="avatar" th:src="${link.spec.logo}" alt=""
+                                         loading="lazy">
+                                    <div class="link-cont">
+                                        <h6 class="link-name"
+                                            th:text="${link.spec.displayName}"></h6>
+                                        <div class="link-des" th:text="${link.spec.description}"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </th:block>
+        </section>
+        <section  class="friend-rss">
+            <div class="rsscat">
+                <h6 class="page-section-title">RSS动态聚合</h6>
+                <ul class="rss-items">
+                    <th:block th:with="friendPosts = ${friendFinder.list(1,100)}">
+                        <li class="rss-item" th:each="friendPost,iterStat : ${friendPosts}"
+                            th:classappend="${days<= 24 ? 'new' : '' }"
+                            th:with="days=${(new java.util.Date().getTime()-friendPost.spec.pubDate.toEpochMilli())/3600000}">
+                            <div class="rss-card">
+                                <h6 class="rss-name">
+                                    <a th:href="${friendPost.spec.postLink}"
+                                       th:text="${friendPost.spec.title}" target="_blank">
+                                    </a>
+                                </h6>
+                                <th:block th:if="${not #strings.isEmpty(friendPost.spec.description)}">
+                                    <div class="rss-des"
+                                         th:text="${#strings.abbreviate(friendPost.spec.description, 100)}"></div>
+                                </th:block>
+                            </div>
+                            <div class="rss-info">
+                                <a class="rss-avatar" th:href="${friendPost.spec.authorUrl}" target="_blank"
+                                   role="button">
+                                    <img alt=""
+                                         th:src="${friendPost.spec.logo}"
+                                         class="avatar avatar-50 photo" height="50" width="50"
+                                         loading="lazy" decoding="async">
+                                    <div class="link-name" th:text="${friendPost.spec.author}"></div>
+                                </a>
+                                <time class="rss-date">
+                                    <span th:if="${days<= 24}">24小时</span>
+                                    <th:block th:unless="${days<= 24}" th:text="${#dates.format(friendPost.spec.pubDate,'yyyy/MM/dd')}"></th:block>
+                                </time>
+                            </div>
+                        </li>
+                    </th:block>
+                </ul>
+            </div>
+        </section>
+        <th:block th:replace="~{macro/links/add-link}"/>
+    </article>
+    <nav class="navigation page-navigation" role="navigation">
+        <a class="button has-thyuu-color icon-add" data-fancybox="" data-src="#add" data-slug="add" role="button">
+            <span>添加友链</span>
+        </a>
+    </nav>
+</main>

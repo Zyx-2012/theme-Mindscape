@@ -1,0 +1,9 @@
+<th:block th:fragment="item(document)" >
+    <th:block th:switch="${document.type}">
+        <th:block th:case="post.content.halo.run">
+            <th:block th:with="post = ${postFinder.getByName(document.metadataName)}">
+                <th:block th:replace="~{macro/article/post-article}" />
+            </th:block>
+        </th:block>
+    </th:block>
+</th:block>

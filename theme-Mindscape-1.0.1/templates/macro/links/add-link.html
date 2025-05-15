@@ -1,0 +1,226 @@
+<section id="add" style="display: none;">
+    <div class="my-info">
+        <h1 class="page-title">添加好友</h1>
+        <ul id="copy">
+            <li><span>站名</span><em th:text="${site.title}"></em></li>
+            <li><span>简述</span><em th:text="${site.subtitle}"></em></li>
+            <li><span>邮箱</span><em th:text="${theme.config.global.admin_email}"></em></li>
+            <li><span>链接</span><em th:text="${site.url}"></em></li>
+            <li th:if="${pluginFinder.available('PluginFeed')}"><span>订阅</span><em
+                    th:text="${site.url+'/rss.xml'}"></em></li>
+            <li><span>标识</span><em th:text="${site.logo}"></em></li>
+        </ul>
+        <div id="copySuccessMessage" class="button has-thyuu-color" style="display:none;">已复制到剪贴板</div>
+    </div>
+    <div class="my-ask">
+        <th:block th:utext="${theme.config.links.content}"></th:block>
+        <div th:if="${pluginFinder.available('link-submit-theme')}">
+            <div class="wpcf7 js"dir="ltr">
+                <div class="screen-reader-response">
+                    <p role="status" aria-live="polite" aria-atomic="true"></p>
+                    <ul></ul>
+                </div>
+                <form class="init" onsubmit="return false">
+                    <div class="friend-form">
+                        <h6>类型<em>必填</em>
+                        </h6>
+                        <ul class="id">
+                            <li>
+                                <p>
+                                    <span data-name="friend-menu">
+                                        <span id="groupName">
+                                        </span>
+                                    </span>
+                                    <em>提示：会根据文章内容调整分类。</em>
+                                </p>
+                            </li>
+                        </ul>
+                        <h6>主要资料<em>必填</em>
+                        </h6>
+                        <ul class="info">
+                            <li>
+                                <p>
+                                    <span data-name="friend-name">
+                                        <input size="40" maxlength="400"
+                                               required aria-invalid="false" placeholder="名称" value=""
+                                               type="text" name="friend-name">
+                                    </span>
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <span data-name="friend-description">
+                                        <input size="40" maxlength="400"
+                                               required aria-invalid="false" placeholder="简述" value=""
+                                               type="text" name="friend-description">
+                                        </span>
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <span data-name="friend-url">
+                                        <input size="40" maxlength="400"
+                                               required aria-invalid="false" placeholder="站点链接"
+                                               value="" type="url" name="friend-url">
+                                        </span>
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <span data-name="friend-logo">
+                                        <input size="40" maxlength="400"
+                                               required aria-invalid="false" placeholder="logo"
+                                               value="" type="url" name="friend-logo">
+                                    </span>
+                                </p>
+                            </li>
+                        </ul>
+                        <h6>附加资料<em>选填</em>
+                        </h6>
+                        <ul class="info">
+                            <li>
+                                <p>
+                                    <span data-name="friend-url-rss">
+                                        <input
+                                                size="40" maxlength="400"
+                                                aria-invalid="false" placeholder="订阅链接" value="" type="url"
+                                                name="friend-url-rss">
+                                    </span>
+                                    <em>提示：每天分别在清晨和傍晚同步更新。首次添加或修改后会在下一周期获取。按W3C标准规则获取，可到卡片下方进入W3C检测失败原因。考虑到资源消耗，如果更新频率过低会取消RSS链接。而站点的排序首先会以添加顺序为基础，然后以
+                                        RSS 动态里第一条的时间逐个降序。</em>
+                                </p>
+                            </li>
+                            <li>
+                                <p>
+                                    <span data-name="friend-email">
+                                        <input
+                                                size="40" maxlength="400"
+                                                aria-required="true" aria-invalid="false" placeholder="邮箱" value="" type="email"
+                                                name="friend-email">
+                                    </span>
+                                    <em>提示：您填写的邮箱用来邮件通知。</em>
+                                    <em>背景：每天由 wordpress 截图自动生成，如果 WP.COM 所属服务器的 IP（在国外）无法访问您的站点或访问 IP 不稳定，则背景会出现错误。</em>
+                                </p>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <p>
+                        <input class="button has-thyuu-color"
+                               type="submit" value="提交链接" onclick="linkSubmit()">
+                    </p>
+                </form>
+
+                <script>
+                    this.getLinkGroups()
+
+                    function linkSubmit() {
+                        var groupName = getGroupName()
+                        var displayName = this.getFieldValue('friend-name')
+                        var description = this.getFieldValue('friend-description')
+                        var url = this.getFieldValue('friend-url')
+                        var logo = this.getFieldValue('friend-logo')
+                        var rssUrl = this.getFieldValue('friend-url-rss')
+                        var email = this.getFieldValue('friend-email')
+
+                        if (displayName != null && displayName != '' && description != null && description != '' && url != null && url != '' && logo != null && logo != '') {
+                            fetch('/apis/api.link.submit.kunkunyu.com/v1alpha1/linksubmits/-/submit', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    spec: {
+                                        displayName: displayName,
+                                        url: url,
+                                        logo: logo,
+                                        email: email,
+                                        description: description,
+                                        groupName: groupName,
+                                        rssUrl: rssUrl
+                                    }
+                                })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if(data.code == 200){
+                                        this.clearForm();
+                                        alert(data.msg);
+                                    }else{
+                                        alert(data.msg);
+                                    }
+                                })
+                                .catch(error => {
+                                    // 处理错误情况
+                                    alert(error.msg);
+                                });
+                        }
+
+                    }
+
+                    function getFieldValue(field) {
+                        var inputFields = document.getElementsByName(field);
+                        // 通常 getElementsByName 返回的是一个 NodeList，我们只需要第一个元素
+                        var inputField = inputFields[0];
+                        // 返回输入字段的值
+                        return inputField ? inputField.value : null;
+                    }
+
+                    function clearFieldValue(field) {
+                        document.getElementsByName(field)[0].value = null;
+                    }
+
+                    function clearForm() {
+                        // 表单重置
+                        this.clearFieldValue('friend-name');
+                        this.clearFieldValue('friend-description')
+                        this.clearFieldValue('friend-url')
+                        this.clearFieldValue('friend-logo')
+                        this.clearFieldValue('friend-url-rss')
+                        this.clearFieldValue('friend-email')
+                    }
+
+                    function getGroupName() {
+                        // 获取所有名为 'friend-menu' 的单选按钮
+                        var radios = document.getElementsByName('friend-menu');
+                        // 遍历单选按钮
+                        for (var i = 0, length = radios.length; i < length; i++) {
+                            if (radios[i].checked) {
+                                // 返回选中的单选按钮的值
+                                return radios[i].value;
+                            }
+                        }
+                        // 如果没有单选按钮被选中，则返回 null 或者你想要的默认值
+                        return null;
+                    }
+
+
+                    function getLinkGroups() {
+                        fetch('/apis/api.link.submit.kunkunyu.com/v1alpha1/linkgroups', {
+                            method: 'GET'
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                let optionList = data;
+                                let option = ``;
+                                if (optionList.length > 0) {
+                                    optionList.forEach(function (item) {
+                                        option += `<span class="wpcf7-list-item first">
+                                                <input type="radio" name="friend-menu" value="${item.groupId}"
+                                                    ${item.selected ? 'checked="checked"' : ''}>
+                                                <span class="wpcf7-list-item-label">${item.groupName}</span>
+                                            </span>`;
+                                    });
+                                }
+                                document.getElementById('groupName').innerHTML = option;
+                            })
+                            .catch(error => {
+                                // 处理错误情况
+                                console.log(error.msg)
+                            });
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</section>

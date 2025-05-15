@@ -1,0 +1,31 @@
+apiVersion: v1alpha1
+kind: AnnotationSetting
+metadata:
+  name: mindscape-annotation-setting
+spec:
+  targetRef:
+    group: ""
+    kind: User
+    # - $formkit: "text"
+    #   name: "mindscape_"
+    #   label: ""
+  formSchema:
+    - $formkit: "text"
+      name: "mindscape_user_social_qq"
+      label: "QQ账号"
+    - $formkit: "text"
+      name: "mindscape_user_social_weibo"
+      label: "微博"
+    - $formkit: "attachment"
+      name: "mindscape_user_social_wechat"
+      label: "微信"
+      accepts:
+        - "image/*"
+    - $formkit: "url"
+      name: "mindscape_user_social_github"
+      label: "GitHub"
+    - $formkit: "attachment"
+      name: "mindscape_user_social_douyin"
+      label: "抖音"
+      accepts:
+        - "image/*"

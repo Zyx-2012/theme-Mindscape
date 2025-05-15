@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- 大型头图背景组件 -->
+
+  <div
+    th:fragment="img-background"
+    th:class="${theme.config.common.isFullScreen ? 'h-[100vh] min-h-[100vh] relative w-full   overflow-hidden ' : 'h-[60vh]  min-h-[400px] relative w-full   overflow-hidden'} " >
+    <!-- 背景图片  -->
+    <div
+      class="absolute inset-0 flex items-center justify-center bg-cover bg-center bg-no-repeat transition-transform duration-1000"
+    >
+      <div class="h-full w-full object-cover relative">
+        <!-- 视频背景 -->
+        <video
+          th:if="${theme.config.common.videoAutoPlay and not #lists.isEmpty(theme.config.common.backgroundVideos) and theme.config.common.backgroundVideos[0].url != ''}"
+          th:with="randomIndex=${T(java.lang.Math).floor(T(java.lang.Math).random() * #lists.size(theme.config.common.backgroundVideos))}"
+          th:src="${theme.config.common.backgroundVideos[randomIndex].url}"
+          class="h-full w-full object-cover"
+          autoplay
+          loop
+          muted
+          playsinline
+        ></video>
+
+        <video
+          th:if="${not theme.config.common.videoAutoPlay and not #lists.isEmpty(theme.config.common.backgroundVideos) and theme.config.common.backgroundVideos[0].url != ''}"
+          th:with="randomIndex=${T(java.lang.Math).floor(T(java.lang.Math).random() * #lists.size(theme.config.common.backgroundVideos))}"
+          th:src="${theme.config.common.backgroundVideos[randomIndex].url}"
+          class="h-full w-full object-cover"
+          loop
+          playsinline
+          id="bgVideo"
+          volume="1"
+          onplay="document.getElementById('playButton').style.display='none';"
+          onpause="document.getElementById('playButton').style.display='flex';"
+        ></video>
+        <!-- 播放按钮 -->
+        <button
+          th:if="${not theme.config.common.videoAutoPlay and not #lists.isEmpty(theme.config.common.backgroundVideos) and theme.config.common.backgroundVideos[0].url!= ''}"
+          id="playButton"
+          onclick="document.getElementById('bgVideo').play(); this.style.display='none';"
+          class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 flex items-center justify-center bg-black/30 hover:bg-black/50 rounded-full transition-all duration-300 text-white cursor-pointer z-10"
+          th:style="${theme.config.common.videoAutoPlay} ? 'display: none;' : 'display: flex;'">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+          </svg>
+        </button>
+       
+        <!-- 图片背景 -->
+        <img
+          th:if="${(#lists.isEmpty(theme.config.common.backgroundVideos) or theme.config.common.backgroundVideos[0].url == '') and not #lists.isEmpty(theme.config.common.backgroundImgs) and theme.config.common.backgroundImgs[0].url != ''}"
+          th:with="randomIndex=${T(java.lang.Math).floor(T(java.lang.Math).random() * #lists.size(theme.config.common.backgroundImgs))}"
+          th:src="${theme.config.common.backgroundImgs[randomIndex].url}"
+          class="h-full w-full object-cover"
+        />
+        <img
+          th:unless="${(not #lists.isEmpty(theme.config.common.backgroundVideos) and theme.config.common.backgroundVideos[0].url != '') or (not #lists.isEmpty(theme.config.common.backgroundImgs) and theme.config.common.backgroundImgs[0].url != '')}"
+          th:src="@{/assets/img/imbg.avif}"
+          class="h-full w-full object-cover"
+        />
+      </div>
+
+      <!-- 暗黑模式遮罩层 -->
+      <div class="bg-black/1 absolute inset-0 transition-opacity duration-300 dark:bg-black/40"></div>
+    </div>
+
+    <!-- 插入星空效果 -->
+    <div th:if="${theme.config.common.showStarryEffect}">
+      <th:block th:replace="~{modules/common/starry}"></th:block>
+    </div>
+    <!-- 插入波浪效果 -->
+    <div th:if="${theme.config.common.showRippleEffect}">
+      <th:block th:replace="~{modules/common/ripple}"></th:block>
+    </div>
+  </div>
+</html>

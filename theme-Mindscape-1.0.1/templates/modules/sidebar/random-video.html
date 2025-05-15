@@ -1,0 +1,88 @@
+<div
+  x-data="{
+    videoUrl: 'https://api.yujn.cn/api/zzxjj.php',
+    isLoading: false,
+    isPortrait: false,
+    shouldAutoPlay: false,
+    nextVideo() {
+      this.isLoading = true;
+      this.shouldAutoPlay = true;
+      this.videoUrl = this.videoUrl + '?temps=' + new Date().getTime();
+    },
+    onVideoLoad(event) {
+      const video = event.target;
+      this.isPortrait = video.videoHeight > video.videoWidth;
+      this.isLoading = false;
+      if (this.shouldAutoPlay) {
+        video.play().catch(error => console.log('自动播放失败:', error));
+      }
+    }
+  }"
+  class="profile-card relative mb-8 overflow-hidden rounded-2xl bg-white p-6 shadow-xl transition-all duration-300 dark:bg-gray-800 dark:shadow-gray-800/30"
+  style="max-width: 300px; margin: 2rem auto"
+>
+  <!-- 毛玻璃背景效果 -->
+  <div class="absolute inset-0 z-0 bg-white/40 backdrop-blur-xl dark:bg-gray-800/40"></div>
+
+  <!-- 装饰性背景图案 -->
+  <div
+    class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 blur-2xl dark:from-blue-400/10 dark:to-purple-400/10"
+  ></div>
+  <div
+    class="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-gradient-to-br from-green-500/20 to-teal-500/20 blur-2xl dark:from-green-400/10 dark:to-teal-400/10"
+  ></div>
+
+  <!-- 内容区域 -->
+  <div class="relative z-10">
+    <!-- 标题栏 -->
+    <div class="mb-4 flex items-center gap-2">
+      <svg class="text-primary-500 h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z"
+        />
+      </svg>
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">随机视频</h3>
+    </div>
+
+    <!-- 视频播放区域 -->
+    <div
+      class="relative overflow-hidden"
+      :class="{ 'h-[400px] rounded-[2rem]': isPortrait, 'aspect-video rounded-xl': !isPortrait }"
+    >
+      <div class="absolute inset-0 flex items-center justify-center">
+        <video
+          x-show="videoUrl"
+          :src="videoUrl"
+          :class="isPortrait ? 'h-full w-auto rounded-[1rem]' : 'w-full h-auto rounded-xl'"
+          controls
+          @loadedmetadata="onVideoLoad"
+        ></video>
+      </div>
+
+      <!-- 控制按钮组 -->
+      <div class="absolute right-4 top-1/2 flex -translate-y-1/2 flex-col gap-3">
+        <!-- 切换按钮 -->
+        <button
+          @click="nextVideo"
+          class="transform rounded-full bg-black/50 p-2.5 text-white opacity-100 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-black/70 focus:outline-none active:scale-95"
+          :disabled="isLoading"
+        >
+          <svg
+            class="h-6 w-6"
+            :class="{ 'animate-spin': isLoading }"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

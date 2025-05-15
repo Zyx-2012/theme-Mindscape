@@ -1,0 +1,7 @@
+<div>
+  <h2 th:text="${error.status}"></h2>
+  <p th:text="${#strings.defaultString(error.title, 'Internal server error')}"></p>
+  <p th:if="${not #strings.isEmpty(error.detail)}" th:text="${error.detail}"></p>
+  <p th:if="${not #strings.isEmpty(error.type)}" th:text="${error.type}"></p>
+  <p th:if="${not #strings.isEmpty(error.instance)}" th:text="${error.instance}"></p>
+</div>

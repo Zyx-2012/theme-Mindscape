@@ -1,0 +1,129 @@
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{modules/layout :: html(content = ~{::content})}">
+  <th:block th:fragment="content">
+    <!-- Header -->
+    <th:block th:replace="~{modules/header}"></th:block>
+    <!-- 大型头图区域 -->
+    <th:block th:replace="~{modules/common/img-background.html}"></th:block>
+
+    <div class="min-h-screen bg-gray-50 transition-colors duration-300 dark:bg-gray-900">
+      <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+        <!-- 时间轴容器 -->
+        <div class="relative" x-data="{ selectedImage: null }">
+          <!-- 时间轴线 -->
+          <div
+            class="absolute left-1/2 h-full w-1 -translate-x-1/2 transform animate-pulse bg-gradient-to-b from-pink-300 via-purple-300 to-blue-300"
+          ></div>
+
+          <!-- 瞬间列表 -->
+          <div class="space-y-12">
+            <div
+              th:each="moment, momentStat : ${moments.items}"
+              th:with="content=${moment.spec.content}"
+              class="relative"
+            >
+              <!-- 时间点 -->
+              <div
+                class="absolute left-1/2 z-10 h-5 w-5 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-gradient-to-r from-pink-300 to-purple-300 shadow-lg shadow-purple-300/50 transition-all duration-300 hover:scale-110 hover:shadow-xl"
+              ></div>
+
+              <!-- 瞬间卡片 -->
+              <div
+                th:classappend="${momentStat.odd} ? 'ml-[55%] animate-slide-left' : 'mr-[55%] animate-slide-right'"
+                class="relative w-[45%] transform overflow-hidden rounded-2xl bg-white shadow-sm transition duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg dark:bg-gray-800"
+              >
+                <!-- 发布时间 -->
+                <div class="absolute left-4 top-4 text-sm text-gray-500 dark:text-gray-400">
+                  <time th:text="${#temporals.format(moment.spec.releaseTime, 'yyyy-MM-dd HH:mm')}"></time>
+                  <!--                <time th:text="${moment.spec.releaseTime}"></time>-->
+                </div>
+
+                <!-- 文本内容 -->
+                <div
+                  th:if="${not #strings.isEmpty(content.html)}"
+                  class="prose mt-8 max-w-none p-6 dark:prose-invert"
+                  th:utext="${content.html}"
+                ></div>
+
+                <!-- 媒体内容 -->
+                <div th:if="${not #lists.isEmpty(content.medium)}" class="space-y-4 p-4">
+                  <div th:each="momentItem : ${content.medium}" class="relative overflow-hidden rounded-lg">
+                    <!-- 图片 -->
+                    <img
+                      th:if="${momentItem.type.name == 'PHOTO'}"
+                      th:src="${momentItem.url}"
+                      class="h-auto w-[40%] cursor-zoom-in object-cover transition-transform duration-300 hover:scale-105"
+                      @click="$dispatch('show-modal', { url: $el.src })"
+                    />
+                    <!-- 视频 -->
+                    <video
+                      th:if="${momentItem.type.name == 'VIDEO'}"
+                      th:src="${momentItem.url}"
+                      class="h-auto w-full rounded-lg"
+                      controls
+                    ></video>
+                    <!-- 音频 -->
+                    <audio
+                      th:if="${momentItem.type.name == 'AUDIO'}"
+                      th:src="${momentItem.url}"
+                      class="w-full"
+                      controls
+                    ></audio>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 图片预览模态框 -->
+        <div
+          x-data="{ isOpen: false, imageUrl: '' }"
+          x-show="isOpen"
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0"
+          x-transition:enter-end="opacity-100"
+          x-transition:leave="transition ease-in duration-200"
+          x-transition:leave-start="opacity-100"
+          x-transition:leave-end="opacity-0"
+          @show-modal.window="isOpen = true; imageUrl = $event.detail.url"
+          @keydown.escape.window="isOpen = false"
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90"
+          style="display: none"
+        >
+          <div @click.away="isOpen = false" class="relative max-h-[90vh] max-w-[90vw]">
+            <button
+              @click="isOpen = false"
+              class="absolute -top-10 right-0 text-3xl text-white transition-colors duration-200 hover:text-gray-300"
+            >
+              &times;
+            </button>
+            <img :src="imageUrl" class="max-h-[90vh] max-w-full object-contain" alt="Preview" />
+          </div>
+        </div>
+
+        <!-- 分页 -->
+        <div th:if="${moments.hasPrevious() || moments.hasNext()}" class="mt-12 flex justify-center space-x-4">
+          <a
+            th:if="${moments.hasPrevious()}"
+            th:href="@{${moments.prevUrl}}"
+            class="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors duration-200 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+          >
+            上一页
+          </a>
+          <span
+            class="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm dark:bg-gray-800 dark:text-gray-200"
+          >
+            第 <span th:text="${moments.page}"></span> 页
+          </span>
+          <a
+            th:if="${moments.hasNext()}"
+            th:href="@{${moments.nextUrl}}"
+            class="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors duration-200 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+          >
+            下一页
+          </a>
+        </div>
+      </div>
+    </div>
+  </th:block>
+</html>

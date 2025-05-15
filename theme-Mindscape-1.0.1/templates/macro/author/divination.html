@@ -1,0 +1,44 @@
+<th:block th:with="constellation = ${#annotations.getOrDefault(author, 'mindscape_user_constellation','baomi')},
+                 zodiac = ${#annotations.getOrDefault(author, 'mindscape_user_zodiac','baomi')},
+                 blood_type = ${#annotations.get(author, 'mindscape_user_blood_type')}">
+    <section th:class="|divination fade-before ${constellation} ${zodiac}|">
+        <h6>类型</h6>
+        <li class="constellation">星座<span>
+                <th:block th:switch="${constellation}">
+                    <th:block th:case="'baomi'">保密</th:block>
+                    <th:block th:case="'aries'">白羊座</th:block>
+                    <th:block th:case="'taurus'">金牛座</th:block>
+                    <th:block th:case="'gemini'">双子座</th:block>
+                    <th:block th:case="'cancer'">巨蟹座</th:block>
+                    <th:block th:case="'leo'">狮子座</th:block>
+                    <th:block th:case="'virgo'">处女座</th:block>
+                    <th:block th:case="'libra'">天秤座</th:block>
+                    <th:block th:case="'scorpio'">天蝎座</th:block>
+                    <th:block th:case="'sagittarius'">射手座</th:block>
+                    <th:block th:case="'capricorn'">摩羯座</th:block>
+                    <th:block th:case="'aquarius'">水瓶座</th:block>
+                    <th:block th:case="'pisces'">双鱼座</th:block>
+                </th:block>
+            </span>
+        </li>
+        <li class="zodiac">生肖<span>
+                <th:block th:switch="${zodiac}">
+                    <th:block th:case="'baomi'">保密</th:block>
+                    <th:block th:case="'rat'">鼠</th:block>
+                    <th:block th:case="'ox'">牛</th:block>
+                    <th:block th:case="'tiger'">虎</th:block>
+                    <th:block th:case="'rabbit'">兔</th:block>
+                    <th:block th:case="'dragon'">龙</th:block>
+                    <th:block th:case="'snake'">蛇</th:block>
+                    <th:block th:case="'horse'">马</th:block>
+                    <th:block th:case="'sheep'">羊</th:block>
+                    <th:block th:case="'monkey'">猴</th:block>
+                    <th:block th:case="'rooster'">鸡</th:block>
+                    <th:block th:case="'dog'">狗</th:block>
+                    <th:block th:case="'pig'">猪</th:block>
+                </th:block>
+            </span>
+        </li>
+        <li class="blood_type">血型<span th:text="${not #strings.isEmpty(blood_type) ? blood_type : '保密'}"></span></li>
+    </section>
+</th:block>

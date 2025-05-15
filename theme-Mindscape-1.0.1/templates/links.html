@@ -1,0 +1,80 @@
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{modules/layout :: html(content = ~{::content})}">
+  <th:block th:fragment="content">
+    <!-- Header -->
+    <th:block th:replace="~{modules/header}"></th:block>
+
+    <!-- 大型头图区域 -->
+    <th:block th:replace="~{modules/common/img-background.html}"></th:block>
+
+    <div class="min-h-screen bg-base-100">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <th:block th:each="group : ${groups}">
+          <div class="mb-4 mt-10 flex items-center justify-center space-x-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-primary-500 dark:text-primary-400 h-6 w-6 transition-colors duration-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"
+              />
+            </svg>
+            <h3
+              class="text-xl font-medium text-gray-900 transition-colors duration-300 dark:text-gray-100"
+              th:text="${group.spec.displayName}"
+            ></h3>
+          </div>
+
+          <div class="grid-auto-flow-dense grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+            <a
+              th:each="link : ${group.links}"
+              th:href="${link.spec.url}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group relative flex cursor-pointer overflow-hidden rounded-2xl bg-white/80 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/90 hover:shadow-lg dark:bg-gray-800/80 dark:hover:bg-gray-800/90"
+            >
+              <div class="relative w-2/5 overflow-hidden">
+                <img
+                  th:src="${link.spec.logo}"
+                  th:alt="${link.spec.displayName}"
+                  class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                />
+              </div>
+
+              <div class="m-2 flex-1 rounded-lg p-4">
+                <div class="flex h-full flex-col justify-between">
+                  <div>
+                    <h4
+                      class="mb-2 truncate text-lg font-medium text-text-base"
+                      th:text="${link.spec.displayName}"
+                    ></h4>
+                    <p
+                      class="mb-2 line-clamp-2 text-sm text-gray-600 dark:text-gray-300"
+                      th:text="${link.spec.description}"
+                    ></p>
+                  </div>
+                  <!--              <p class="text-xs text-gray-400 dark:text-gray-500">-->
+                  <!--                <span th:text="${#dates.format(link.metadata.creationTimestamp, 'yyyy-MM-dd')}"></span>-->
+                  <!--              </p>-->
+                </div>
+              </div>
+
+              <!-- 底部装饰线 -->
+              <div
+                class="absolute bottom-0 left-1/2 h-0.5 w-0 bg-gradient-to-r from-blue-200 via-blue-300 to-violet-300 transition-all duration-300 group-hover:left-0 group-hover:w-full dark:from-blue-500 dark:via-blue-400 dark:to-violet-400"
+              ></div>
+            </a>
+          </div>
+        </th:block>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <th:block th:replace="~{modules/footer.html}"></th:block>
+  </th:block>
+</html>

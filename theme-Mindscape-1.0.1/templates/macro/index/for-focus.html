@@ -1,0 +1,79 @@
+<th:block th:if="${featured_focus_num > 0}"
+          th:with="posts = ${thyuuXingduPostFinder.list({
+            page: 1,
+            size: #lists.isEmpty(featured_focus_id) ? featured_focus_num : 5,
+            names: featured_focus_id,
+            focusPinned: #lists.isEmpty(featured_focus_id) ? 'true' : 'false'
+            })}">
+    <section class="for-focus thyuu-slide f-carousel fade-before">
+        <li class="post f-carousel__slide" th:each="post : ${posts.items}">
+            <hgroup class="part-title">
+                <em>焦点推荐<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="1em" height="1em" fill="currentColor"><path d="M99.995 200v-56.031L0 99.995h56.031L99.995 0v56.031L200 99.995h-56.031L99.995 200Z"></path></svg><i><th:block th:replace="~{modules/widgets/time :: time(${post.spec.publishTime})}"></th:block></i>
+                </em>
+                <span th:text="|${post.stats.visit}°|"></span>
+                <h2>
+                    <i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path d="M100 0c3.395 53.76 46.24 96.605 100 100-53.76 3.395-96.605 46.24-100 100-3.395-53.76-46.24-96.605-100-100C53.76 96.605 96.605 53.76 100 0Z"></path></svg></i>
+                    <a class="line-clamp" th:href="@{${post.status.permalink}}" th:text="${post.spec.title}"></a>
+                </h2>
+                <p th:if="${!post.spec.excerpt.autoGenerate}"
+                   class="line-clamp"
+                   th:text="${post.spec.excerpt.raw}"></p>
+            </hgroup>
+            <article>
+                <figure class="mask-blur">
+                    <img th:unless="${#strings.isEmpty(post.spec.cover)}"
+                         width="128"
+                         height="85"
+                         th:src="${thumbnail.gen(post.spec.cover, 'm')}"
+                         class="attachment-thumbnail size-thumbnail"
+                         alt
+                         decoding="async">
+                    <div th:if="${#strings.isEmpty(post.spec.cover)}" class="no-thumbnail"></div>
+                </figure>
+                <nav>
+                    <menu>
+                        <img alt
+                             th:src="${post.owner.avatar}"
+                             class="avatar avatar-48 photo" height="48" width="48" decoding="async">
+                        <a th:href="${post.owner.permalink}" th:title="|由 ${post.owner.displayName} 发布|" rel="author" th:text="${post.owner.displayName}"></a>
+                        ·
+                        <th:block th:each="category,iter : ${post.categories}">
+                            <th:block th:if="${iter.index > 0}">/</th:block>
+                            <a th:href="@{${category.status.permalink}}"
+                               rel="category tag"
+                               th:text="${category.spec.displayName}"></a>
+                        </th:block>
+                    </menu>
+                    <menu th:if="${not #lists.isEmpty(post.tags)}">
+                        <th:block th:each="tag,iter : ${post.tags}">
+                            <th:block th:if="${iter.index > 0}">/</th:block>
+                            <a th:href="@{${tag.status.permalink}}"
+                               rel="tag"
+                               th:text="${tag.spec.displayName}"></a>
+                        </th:block>
+                    </menu>
+                </nav>
+                <th:block th:with="ratings = ${thyuuXingduCommentFinder.ratingList({ group: 'content.halo.run', version: 'v1alpha1', kind: 'Post', name: post.metadata.name },1,4)}">
+                    <ul th:unless="${ratings.total == 0}">
+                        <li th:each="comment : ${ratings.items}">
+                            <img alt=""
+                                 th:src="${comment.owner.avatar}"
+                                 class="avatar avatar-48 photo"
+                                 height="48"
+                                 width="48"
+                                 decoding="async">
+                            <div>
+                                <cite th:text="${comment.owner.displayName}"></cite>
+                                <a class="font-small line-clamp" th:href="${#strings.isEmpty(comment.spec.permalink) ? '/' :  comment.spec.permalink + (comment.spec.type == 'comment' ? '#comment-' : '#reply-') + comment.spec.objId}"
+                                   role="button" target="_blank" th:text="${#strings.abbreviate(comment.spec.content, 125)}">
+                                </a>
+                                <time class="font-small"><th:block th:replace="~{modules/widgets/time :: time(${comment.spec.creationTime})}"></th:block>说</time>
+                            </div>
+                        </li>
+                    </ul>
+                </th:block>
+                <a th:href="@{${post.status.permalink}}" class="read-more" role="button" target="_blank"></a>
+            </article>
+        </li>
+    </section>
+</th:block>

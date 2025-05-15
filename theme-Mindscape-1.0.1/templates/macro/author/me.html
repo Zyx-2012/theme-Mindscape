@@ -1,0 +1,24 @@
+<section class="me fade-before" th:with="email=${author.spec.email},
+                 social_qq=${#annotations.get(author, 'mindscape_user_social_qq')},
+                 social_weibo=${#annotations.get(author, 'mindscape_user_social_weibo')},
+                 social_wechat=${#annotations.get(author, 'mindscape_user_social_wechat')},
+                 social_douyin=${#annotations.get(author, 'mindscape_user_social_douyin')},
+                 social_github=${#annotations.get(author, 'mindscape_user_social_github')}">
+    <h6>简述</h6>
+    <span th:text="${not #strings.isEmpty(author.spec.bio) ? author.spec.bio : '未填写个人介绍'}"></span>
+    <li class="info">
+        <a th:if="${not #strings.isEmpty(email)}" role="button" class="more no-icon icon-mail-fill"
+            th:href="|mailto:${email}|" target="_blank" th:text="${email}"></a>
+        <a th:if="${not #strings.isEmpty(social_qq)}" role="button" class="more no-icon icon-qq-fill"
+            th:href="|tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=${social_qq}|"
+            target="_blank"></a>
+        <a th:if="${not #strings.isEmpty(social_wechat)}" role="button" class="more no-icon icon-weixin-fill"
+            data-fancybox="tip" th:href="${social_wechat}"></a>
+        <a th:if="${not #strings.isEmpty(social_github)}" role="button" class="more no-icon icon-GitHub-fill"
+           th:href="|https://github.com/${social_github}|" target="_blank"></a>
+        <a th:if="${not #strings.isEmpty(social_weibo)}" role="button" class="more no-icon icon-weibo-fill"
+           th:href="|https://weibo.com/u/${social_weibo}|" target="_blank"></a>
+        <a th:if="${not #strings.isEmpty(social_douyin)}" role="button" class="more no-icon icon-douyin-fill"
+            data-fancybox="tip" th:href="${social_douyin}"></a>
+    </li>
+</section>

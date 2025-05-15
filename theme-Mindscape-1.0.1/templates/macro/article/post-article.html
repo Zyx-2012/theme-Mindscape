@@ -1,0 +1,64 @@
+<article th:with="post_type =  ${#annotations.getOrDefault(post, 'mindscape_post_type','standard')},
+                                    fastread =  ${#annotations.getOrDefault(post, 'mindscape_post_fastread','0')}"
+    th:class="|entry-preview fade-before post format-${post_type} hentry|">
+    <header class="thumbnail">
+        <img th:unless="${#strings.isEmpty(post.spec.cover)}" th:src="${thumbnail.gen(post.spec.cover, 'm')}" alt="" loading="lazy">
+        <div th:if="${#strings.isEmpty(post.spec.cover)}" class="no-thumbnail"></div>
+        <a th:if="${fastread == '1'}"
+           class="button icon-fast-read"
+           data-fancybox
+           th:data-src="'#fast-read-'+${post.metadata.name}">
+            <th:block th:replace="~{modules/widgets/time :: time(${post.spec.publishTime})}"></th:block>
+            <span class="btn-meta">速读</span>
+        </a>
+        <a th:unless="${fastread == '1'}" class="button icon-views" th:href="@{${post.status.permalink}}">
+            <th:block th:replace="~{modules/widgets/time :: time(${post.spec.publishTime})}"></th:block>
+            <span class="btn-meta">查看</span>
+        </a>
+        <a th:href="@{${post.status.permalink+'#comments'}}" class="button icon-pinglun has-btn-effect"><span
+                class="btn-meta">评论</span></a>
+        <a th:if="${roleName == 'super-role'}" class="button icon-edit has-btn-effect"
+            th:href="${'/console/posts/editor?name='+post.metadata.name+'&returnToView=true'}" target="_self">
+            <span class="btn-meta">编辑</span>
+        </a>
+    </header>
+    <footer class="thyuupost">
+        <h6 class="entry-title has-line-clamp">
+            <a th:if="${fastread == '1'}"
+               data-fancybox
+               th:data-src="'#fast-read-'+${post.metadata.name}"
+               th:text="${post.spec.title}"></a>
+            <a th:unless="${fastread == '1'}" th:href="@{${post.status.permalink}}" th:text="${post.spec.title}"
+                rel="bookmark"></a>
+        </h6>
+        <div class="post-meta">
+            <div class="post-mark">
+                <span class="tag" th:if="${not #lists.isEmpty(post.categories)}">
+                    <th:block th:each="category,iter : ${post.categories}">
+                        <th:block th:if="${iter.index > 0}">/</th:block>
+                        <a th:href="@{${category.status.permalink}}" rel="category tag"
+                            th:text="${category.spec.displayName}"></a>
+                    </th:block>
+                </span>
+                <span class="tag-list" th:if="${not #lists.isEmpty(post.tags)}">
+                    <a th:each="tag : ${post.tags}" th:href="@{${tag.status.permalink}}" rel="tag"
+                        th:text="${tag.spec.displayName}"></a>
+                </span>
+            </div>
+        </div>
+    </footer>
+    <slot th:if="${fastread == '1'}" th:id="'fast-read-'+${post.metadata.name}" class="fast-read" style="display: none;">
+        <header class="fast-read-btn">
+            <h6 class="fast-read-title" th:text="${post.spec.title}"></h6>
+            <a class="button icon-views has-btn-effect" th:href="@{${post.status.permalink}}"
+               rel="bookmark" role="button">查看完整文章</a>
+            <a th:href="@{${post.status.permalink+'#comments'}}"
+               class="button icon-pinglun">评论</a>
+        </header>
+        <article th:id="'post-'+${post.metadata.name}"
+            th:class="|post-${post.metadata.name} post type-post status-publish format-${post_type} has-post-thumbnail hentry|"
+            th:with="content = ${postFinder.content(post.metadata.name)}" >
+            <div class="entry-content" th:utext="${content.content}"></div>
+        </article>
+    </slot>
+</article>

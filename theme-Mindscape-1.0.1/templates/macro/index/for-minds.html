@@ -1,0 +1,36 @@
+<section class="for-minds" th:if="${featured_minds_num > 0}">
+  <hgroup class="part-title">
+    <h2>
+      <i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path fill="currentColor" d="M100 0c3.395 53.76 46.24 96.605 100 100-53.76 3.395-96.605 46.24-100 100-3.395-53.76-46.24-96.605-100-100C53.76 96.605 96.605 53.76 100 0Z"></path></svg></i>走心评论
+    </h2>
+  </hgroup>
+  <ul class="snap-style no-scrollbar">
+    <th:block th:each="comment,iterStat : ${thyuuXingduCommentFinder.ratingList(null, 1, featured_minds_num)}">
+      <a class="fade-before"
+         th:href="${#strings.isEmpty(comment.spec.permalink) ? '/' :
+         comment.spec.permalink + (comment.spec.type == 'comment' ? '#comment-' : '#reply-') + comment.spec.objId}"
+         role="button">
+        <cite>
+          <img alt=""
+               th:src="${comment.owner.avatar}"
+               class="avatar avatar-48 photo"
+               height="48"
+               width="48"
+               decoding="async">
+          <h6 th:text="${comment.owner.displayName}"></h6>
+          <time class="font-small"><th:block th:replace="~{modules/widgets/time :: time(${comment.spec.creationTime})}"></th:block></time>
+          <p class="font-small line-clamp" th:text="|发表在「${#strings.isEmpty(comment.spec.title) ? '该文章/页面不存在' : comment.spec.title}」|"></p>
+        </cite>
+        <article>
+          <p class="line-clamp" th:text="${#strings.abbreviate(comment.spec.content, 150)}"></p>
+        </article>
+      </a>
+    </th:block>
+  </ul>
+  <a th:if="${not #strings.isEmpty(theme.config.index.minds_page)}"
+     role="button"
+     class="read-more icon-pinglun-title"
+     th:href="${theme.config.index.minds_page}">
+    <span>查看更多走心评论</span>
+  </a>
+</section>

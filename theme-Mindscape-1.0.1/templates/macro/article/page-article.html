@@ -1,0 +1,5 @@
+<article class="page-article">
+  <th:block th:each="post,iter : ${posts.items}">
+    <th:block th:replace="~{macro/article/post-article}" />
+  </th:block>
+</article>

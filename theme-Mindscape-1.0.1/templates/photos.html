@@ -1,0 +1,177 @@
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{modules/layout :: html(content = ~{::content})}">
+  <th:block th:fragment="content">
+    <!-- Header -->
+    <th:block th:replace="~{modules/header :: header(isOverlayPage=false)}"></th:block>
+
+    <div class="min-h-screen bg-base-100 transition-colors duration-300">
+      <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <!-- 页面标题和描述 -->
+        <div class="mb-12 text-center">
+          <h1 class="mb-4 text-4xl font-bold text-gray-900 transition-colors duration-300 dark:text-gray-100">
+            时光相册
+          </h1>
+          <p class="text-lg text-gray-600 transition-colors duration-300 dark:text-gray-400">
+            每一张照片都是一次美好的记忆
+          </p>
+        </div>
+
+        <!-- 分类标签按钮 -->
+        <script th:inline="javascript">
+          const allPhotos = /*[[${groups}]]*/ [];
+        </script>
+        <div
+          x-data="{
+          selectedGroup: 'all',
+          allPhotos: allPhotos,
+          get filteredPhotos() {
+            if (this.selectedGroup === 'all') {
+              return this.allPhotos.flatMap(group => group.photos);
+            }
+            const group = this.allPhotos.find(g => g.metadata.name === this.selectedGroup);
+            return group ? group.photos : [];
+          }
+        }"
+        >
+          <div class="mb-12 flex flex-wrap justify-center gap-3">
+            <button
+              @click="selectedGroup = 'all'"
+              :class="selectedGroup === 'all' ? 'bg-gradient-to-r from-green-300 to-blue-300 dark:from-green-500 dark:to-blue-500' : 'bg-gradient-to-r from-green-200 to-blue-200 dark:from-green-600 dark:to-blue-600'"
+              class="rounded-full px-6 py-2 text-sm font-medium text-gray-800 transition-all duration-300 hover:scale-105 dark:text-gray-200"
+            >
+              全部
+            </button>
+            <template x-for="group in allPhotos" :key="group.metadata.name">
+              <button
+                @click="selectedGroup = group.metadata.name"
+                :class="selectedGroup === group.metadata.name ? 'bg-gradient-to-r from-green-300 to-blue-300 dark:from-green-500 dark:to-blue-500' : 'bg-gradient-to-r from-green-200 to-blue-200 dark:from-green-600 dark:to-blue-600'"
+                class="rounded-full px-6 py-2 text-sm font-medium text-gray-800 transition-all duration-300 hover:scale-105 dark:text-gray-200"
+                x-text="group.spec.displayName"
+              ></button>
+            </template>
+          </div>
+
+          <div
+            x-show="selectedGroup === 'all'"
+            x-transition:enter="transition ease-out duration-400"
+            x-transition:enter-start="opacity-0 transform translate-x-[-20px]"
+            x-transition:enter-end="opacity-100 transform translate-x-0"
+            x-transition:leave="transition ease-in-out duration-400"
+            x-transition:leave-start="opacity-100 transform translate-y-0"
+            x-transition:leave-end="opacity-0 transform translate-y-2"
+          >
+            <ul class="mb-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <template x-for="(photo, index) in filteredPhotos" :key="photo.metadata.name">
+                <li
+                  class="hover:border-primary-300/50 dark:hover:border-primary-600/50 group relative cursor-pointer overflow-hidden rounded-xl border border-gray-200/50 bg-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] dark:border-gray-700/50 dark:bg-gray-800/30"
+                  @click="$dispatch('show-modal', { url: photo.spec.url })"
+                  :style="{
+                    'animation-delay': `${index * 50}ms`,
+                    'animation': selectedGroup === 'all' ? 'fadeInUp 0.6s ease-out forwards' : ''
+                  }"
+                >
+                  <div class="relative overflow-hidden rounded-t-xl">
+                    <img
+                      :src="photo.spec.url"
+                      :alt="photo.spec.displayName"
+                      class="h-64 w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                    <div
+                      class="absolute inset-0 bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    ></div>
+                  </div>
+                  <div class="p-4">
+                    <h3
+                      class="truncate text-sm font-medium text-gray-900 dark:text-gray-100"
+                      x-text="photo.spec.displayName"
+                    ></h3>
+                  </div>
+                </li>
+              </template>
+            </ul>
+          </div>
+
+          <template x-for="group in allPhotos" :key="group.metadata.name">
+            <div
+              x-show="selectedGroup === group.metadata.name"
+              x-transition:enter="transition ease-out duration-400"
+              x-transition:enter-start="opacity-0 transform translate-x-[-20px]"
+              x-transition:enter-end="opacity-100 transform translate-x-0"
+              x-transition:leave="transition ease-in-out duration-400"
+              x-transition:leave-start="opacity-100 transform translate-y-0"
+              x-transition:leave-end="opacity-0 transform translate-y-2"
+            >
+              <ul class="mb-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <template x-for="(photo, index) in group.photos" :key="photo.metadata.name">
+                  <li
+                    class="relative cursor-pointer overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+                    @click="$dispatch('show-modal', { url: photo.spec.url })"
+                    :style="{
+                      'animation-delay': `${index * 50}ms`,
+                      'animation': selectedGroup === group.metadata.name ? 'fadeInUp 0.6s ease-out forwards' : ''
+                    }"
+                  >
+                    <div class="relative overflow-hidden rounded-t-xl">
+                      <img
+                        :src="photo.spec.url"
+                        :alt="photo.spec.displayName"
+                        class="h-64 w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                      />
+                      <div
+                        class="absolute inset-0 bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      ></div>
+                    </div>
+                    <div class="p-4">
+                      <h3
+                        class="truncate text-sm font-medium text-gray-900 dark:text-gray-100"
+                        x-text="photo.spec.displayName"
+                      ></h3>
+                    </div>
+                  </li>
+                </template>
+              </ul>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div
+      x-data="{ isOpen: false, imageUrl: '' }"
+      x-show="isOpen"
+      x-transition:enter="transition ease-out duration-300"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      @show-modal.window="isOpen = true; imageUrl = $event.detail.url"
+      @keydown.escape.window="isOpen = false"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90"
+      style="display: none"
+    >
+      <div @click.away="isOpen = false" class="relative max-h-[90vh] max-w-[90vw]">
+        <button
+          @click="isOpen = false"
+          class="absolute -top-10 right-0 text-3xl text-white transition-colors duration-200 hover:text-gray-300"
+        >
+          &times;
+        </button>
+        <img :src="imageUrl" class="max-h-[90vh] max-w-full object-contain" alt="Preview" />
+      </div>
+    </div>
+  </th:block>
+</html>
+
+<style>
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+</style>

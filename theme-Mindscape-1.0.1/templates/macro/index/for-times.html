@@ -1,0 +1,15 @@
+<section class="for-times" id="tenyear" style="--pct:0;">
+    <hgroup class="part-title">
+        <h2 th:text="${theme.config.global.site_cycle_notes}"></h2>
+        <nav class="part-nav">
+            <time class="start-date"></time>
+            <i></i>
+            <time class="end-date"></time>
+        </nav>
+    </hgroup>
+    <figure><progres></progres></figure>
+    <a th:if="${not #strings.isEmpty(theme.config.index.board_page)}"
+       role="button"
+       class="read-more icon-mes"
+       th:href="${theme.config.index.board_page}"><span>留下温度不虚此行</span></a>
+</section>

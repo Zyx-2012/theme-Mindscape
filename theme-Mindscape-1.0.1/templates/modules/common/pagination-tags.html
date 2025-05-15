@@ -1,0 +1,92 @@
+<div class="mt-10 flex flex-wrap items-center justify-center gap-4" th:if="${posts.hasPrevious || posts.hasNext}">
+  <!-- 上一页按钮 -->
+  <a
+    th:if="${posts.hasPrevious}"
+    th:href="@{${posts.prevUrl}}"
+    class="group flex h-10 w-10 items-center justify-center transition-all duration-200"
+  >
+    <svg
+      class="hover:text-primary-500 h-5 w-5 text-gray-600 transition-all duration-200 group-hover:-translate-x-0.5 dark:text-gray-300"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+  </a>
+  <a th:unless="${posts.hasPrevious}" class="flex h-10 w-10 cursor-not-allowed items-center justify-center">
+    <svg
+      class="h-5 w-5 text-gray-400 dark:text-gray-500"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+  </a>
+
+  <!-- 页码列表 -->
+  <div class="flex items-center gap-3">
+    <!-- 第一页 -->
+    <a
+      th:href="@{${tag.status.permalink} + '/page/1'}"
+      th:class="${posts.page == 1 ? 'inline-flex text-text-base group h-8 w-8 items-center justify-center rounded-full bg-primary hover:scale-100 ' : 'xx'}      "
+      >1</a
+    >
+
+    <!-- 省略号（如果需要） -->
+    <span th:if="${posts.page > 4}" class="text-gray-400 dark:text-gray-500">...</span>
+
+    <!-- 中间页码 -->
+    <th:block th:with="start=${posts.page <= 4 ? 2 : posts.page - 2}, end=${posts.page <= 4 ? 7 : posts.page + 2}">
+      <a
+        th:each="i : ${#numbers.sequence(start, end)}"
+        th:if="${i < posts.totalPages}"
+        th:href="@{${tag.status.permalink} + '/page/' + ${i}}"
+        th:text="${i}"
+        th:class="${posts.page == i ? 'group inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-text-base hover:scale-100  ' : 'xx'}    "
+      ></a>
+    </th:block>
+
+    <!-- 省略号（如果需要） -->
+    <span th:if="${posts.page < posts.totalPages - 3}" class="text-gray-400 dark:text-gray-500">...</span>
+
+    <!-- 最后一页 -->
+    <a
+      th:if="${posts.totalPages > 1}"
+      th:href="@{${tag.status.permalink} + '/page/' + ${posts.totalPages}}"
+      th:text="${posts.totalPages}"
+      th:class="${posts.page == posts.totalPages ? ' hover:scale-100 group inline-flex h-8 w-8 items-center justify-center rounded-full  bg-primary text-text-base ' : 'xx'}   "
+    ></a>
+  </div>
+
+  <!-- 下一页按钮 -->
+  <a
+    th:if="${posts.hasNext}"
+    th:href="@{${posts.nextUrl}}"
+    class="group flex h-10 w-10 items-center justify-center transition-all duration-200"
+  >
+    <svg
+      class="hover:text-primary-500 h-5 w-5 text-gray-600 transition-all duration-200 group-hover:translate-x-0.5 dark:text-gray-300"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+    </svg>
+  </a>
+  <a th:unless="${posts.hasNext}" class="flex h-10 w-10 cursor-not-allowed items-center justify-center">
+    <svg
+      class="h-5 w-5 text-gray-400 dark:text-gray-500"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+    </svg>
+  </a>
+</div>

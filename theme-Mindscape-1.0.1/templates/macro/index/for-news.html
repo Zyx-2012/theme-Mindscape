@@ -1,0 +1,64 @@
+<div class="for-news">
+    <div class="toggle-home">
+        <label for="toggle-new" class="toggle-new" role="button" title="查看">
+            <span class="me">博主</span>
+            <span class="fr" th:if="${pluginFinder.available('plugin-friends')}">朋友们</span>
+        </label>
+        <button class="season-btn"></button>
+    </div>
+    <ul class="me no-scrollbar" th:with="posts = ${postFinder.list({page: 1, size: 6, sort: {'spec.publishTime,desc', 'metadata.creationTimestamp,asc'}})}">
+        <li th:if="${not #lists.isEmpty(posts)}"
+            th:each="post,iter : ${posts.items}">
+            <img th:unless="${#strings.isEmpty(post.spec.cover)}"
+                 width="128" height="96"
+                 th:src="${thumbnail.gen(post.spec.cover, 'm')}"
+                 class="attachment-thumbnail size-thumbnail"
+                 alt=""
+                 data-fancybox="images"
+                 th:data-caption="${post.spec.title}"
+                 decoding="async">
+            <div th:if="${#strings.isEmpty(post.spec.cover)}" class="no-thumbnail"></div>
+            <article>
+                <h6>
+                    <a class="line-clamp"
+                       th:href="@{${post.status.permalink}}"
+                       th:title="${post.spec.title}"
+                       th:text="${post.spec.title}"></a>
+                </h6>
+                <time class="font-small"><th:block th:replace="~{modules/widgets/time :: time(${post.spec.publishTime})}"></th:block></time>
+                <p class="font-small line-clamp" th:text="${post.spec.excerpt.raw}"></p>
+            </article>
+            <a th:href="@{${post.status.permalink}}" class="read-more" role="button" target="_blank"></a>
+        </li>
+
+        <li th:unless="${not #lists.isEmpty(posts)}" class="no-data"><h6>暂时没有动态数据</h6><p>没有找到文章</p></li>
+    </ul>
+    <ul class="fr no-scrollbar" th:if="${pluginFinder.available('plugin-friends')}">
+        <th:block th:with="friendPosts = ${friendFinder.list(1,6)}">
+            <li th:if="${not #lists.isEmpty(friendPosts)}"
+                th:each="friendPost,iterStat : ${friendPosts}"
+            >
+                <img alt=""
+                     th:src="${friendPost.spec.logo}"
+                     class="avatar avatar-48 photo"
+                     height="48"
+                     width="48"
+                     decoding="async">
+                <article>
+                    <h6>
+                        <a class="line-clamp"
+                           th:href="${friendPost.spec.postLink}"
+                           th:title="${friendPost.spec.title}"
+                           th:text="${friendPost.spec.title}"
+                           target="_blank"></a>
+                    </h6>
+                    <time class="font-small"><th:block th:replace="~{modules/widgets/time :: time(${friendPost.spec.pubDate})}"></th:block></time>
+                    <p class="font-small line-clamp" th:text="${friendPost.spec.author}"></p>
+                    <p class="font-small line-clamp" th:text="${friendPost.spec.description}"></p>
+                </article>
+                <a th:href="${friendPost.spec.authorUrl}" class="read-more" role="button" target="_blank"></a>
+            </li>
+            <li th:unless="${not #lists.isEmpty(friendPosts)}" class="no-data"><h6>暂时没有动态数据</h6><p>可能处于数据刷新或正在更新过程中，请等待下一周期更新</p></li>
+        </th:block>
+    </ul>
+</div>

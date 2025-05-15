@@ -1,0 +1,37 @@
+<section class="for-first">
+  <div class="for-suns">
+    <div class="sun-area"><sun></sun><flow><i></i><i></i><i></i></flow></div>
+  </div>
+  <img th:if="${not #strings.isEmpty(theme.config.limited.limited_bg)}"
+       th:src="${theme.config.limited.limited_bg}"
+       class="limited-bg"
+       th:alt="${theme.config.limited.limited_title}"
+       fetch-priority="high"
+       decoding="sync">
+  <div class="for-come">
+    <div class="greets">
+      <th:block sec:authorize="isAuthenticated()">
+        <span>你好 [[${contributor.displayName}]]，</span>欢迎回到[[${site.title}]]
+      </th:block>
+      <th:block sec:authorize="isAnonymous()">
+        <span>你好，</span>欢迎来到[[${site.title}]]
+      </th:block>
+    </div>
+    <div class="thanks">
+      <h2 th:if="${not #strings.isEmpty(site.subtitle)}" id="slogan" th:style="|--count: ${#strings.length(site.subtitle)} ;|" th:text="${site.subtitle}"></h2>
+      <h2 id="limite" th:style="|--count: ${#strings.length(theme.config.limited.limited_title)} ;|" th:text="${theme.config.limited.limited_title}"></h2>
+    </div>
+  </div>
+  <th:block th:replace="~{'macro/index/for-news'}" />
+  <nav class="part-btn"
+       th:with="archs_page = ${theme.config.index.archs_page},
+       links_page = ${theme.config.index.links_page},
+       douban_page = ${theme.config.index.douban_page}">
+    <a th:if="${not #strings.isEmpty(archs_page)}" role="button" class="icon-archive fade-before"
+       th:href="${archs_page}"><span>文章归档</span></a>
+    <a th:if="${pluginFinder.available('plugin-douban') && not #strings.isEmpty(douban_page)}" role="button" class="icon-film fade-before"
+       th:href="${douban_page}"><span>豆瓣动态</span></a>
+    <a th:if="${not #strings.isEmpty(links_page)}" role="button" class="icon-friend fade-before"
+       th:href="${links_page}"><span>朋友动态</span></a>
+  </nav>
+</section>

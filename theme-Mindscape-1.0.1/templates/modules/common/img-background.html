@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- 大型头图背景组件 -->
+  
+
+  <!-- 移动端独占 -->
+  <div class="md:hidden">
+    <th:block th:replace="~{modules/common/img-background-mobile.html}"></th:block>
+  </div>
+
+  <!-- 桌面端独占 -->
+  <div class="hidden md:block">
+    <th:block th:replace="~{modules/common/img-background-web.html}"></th:block>
+  </div>
+
+</html>

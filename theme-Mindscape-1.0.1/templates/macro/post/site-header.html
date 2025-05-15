@@ -1,0 +1,117 @@
+<header class="site-header">
+    <figure>
+        <th:block th:unless="${#strings.isEmpty(post.spec.cover)}">
+            <img th:src="${post.spec.cover}"
+                 class="" alt="" data-fancybox="images"
+                 th:data-caption="${post.spec.title}"
+                 th:data-src="${post.spec.cover}"
+                 data-slug="article-cover"
+                 decoding="async"
+                 fetchpriority="high">
+            <i class="loading">封面图加载中</i>
+        </th:block>
+        <div th:if="${#strings.isEmpty(post.spec.cover)}" class="no-thumbnail"></div>
+    </figure>
+    <hgroup>
+        <h1 th:text="${post.spec.title}"></h1>
+        <div class="post-mark">
+            <ul class="tag" th:if="${not #lists.isEmpty(post.categories)}">
+                <th:block th:each="category,iter : ${post.categories}">
+                    <th:block th:if="${iter.index > 0}">/</th:block>
+                    <a th:href="@{${category.status.permalink}}" rel="category tag"
+                       th:text="${category.spec.displayName}"></a>
+                </th:block>
+           </ul>
+            <ul class="tag-list" th:if="${not #lists.isEmpty(post.tags)}">
+                <a th:each="tag : ${post.tags}" th:href="@{${tag.status.permalink}}" rel="tag"
+                   th:text="${tag.spec.displayName}"></a>
+            </ul>
+        </div>
+        <div class="post-note" th:if="${!post.spec.excerpt.autoGenerate}"><i></i>[[${post.spec.excerpt.raw}]]</div>
+        <div class="post-meta">
+            <ul class="no-scrollbar"
+                 th:with="weather = ${#annotations.get(post, 'thyuu_post_weather')},
+             mood = ${#annotations.getOrDefault(post, 'thyuu_post_mood','0')},
+             camera = ${#annotations.get(post, 'thyuu_post_camera')}"
+            >
+                <li class="author">
+                    <i>本文作者</i>
+                    <a th:href="@{${post.owner.permalink}}" th:title="|查看关于${post.owner.displayName}的个人资料|" rel="author" role="button">
+                        <em>
+                            <img alt="" th:src="${post.owner.avatar}"
+                                 class="avatar avatar-32 photo" height="32" width="32" decoding="async"> [[${post.owner.displayName}]]</em>
+                    </a>
+                </li>
+                <li class="date">
+                    <i>文章发布日期</i>
+                    <em class="icon-calendar" th:text="${#dates.format(post.spec.publishTime,'yyyy-MM-dd HH:mm')}"></em>
+                </li>
+                <li class="views">
+                    <i>热度</i>
+                    <em class="icon-heats" th:text="${post.stats.visit}"></em>
+                </li>
+                <li th:if="${not #strings.isEmpty(weather)}" class="thyuu_post_weather">
+                    <i>天气</i>
+                    <em class="icon-weather" th:text="${weather}"></em>
+                </li>
+                <li th:if="${mood != '0'}" th:class="|thyuu_post_mood mood-${mood}|">
+                    <i>心情</i>
+                    <em class="icon-hearts"><th:block th:replace="~{modules/widgets/mood :: mood(${mood})}"></th:block></em>
+                </li>
+                <li th:if="${not #strings.isEmpty(camera)}" class="thyuu_post_camera">
+                    <i>相机</i>
+                    <em class="icon-camera" th:text="${camera}"></em>
+                </li>
+                <li th:if="${not #strings.isEmpty(locale)}" class="thyuu_post_locale">
+                    <i>地点</i>
+                    <em class="icon-location">[[${locale}]]<button th:if="${not #strings.isEmpty(locate)}" id="cover-map-btn" class="icon-views"></button></em>
+                </li>
+                <li class="words-num">
+                    <i>本文共计</i>
+                    <em class="icon-text"></em>
+                </li>
+                <li class="read_time">
+                    <i>预计阅读</i>
+                    <em class="icon-time"></em>
+                </li>
+            </ul>
+            <button id="copy-btn" class="share icon-share" title="分享这篇文章">
+                <script>
+                    const shareButton = document.querySelector('#copy-btn');
+                    if (navigator.share) {
+                        shareButton.addEventListener('click', () => {
+                            const authorName = "[(${post.owner.displayName})]";
+                            const siteName = "[(${site.title})]";
+                            const postTitle = "[(${post.spec.title})]";
+                            const postUrl = "[(${post.status.permalink})]";
+                            const shareData = {
+                                title: `分享「${authorName}」发表在${siteName}的文章「${postTitle}」`,
+                                url: postUrl,
+                                text: `${postTitle} - ${siteName}`
+                            };
+
+                            navigator.share(shareData)
+                                .then(() => console.log('分享成功'))
+                                .catch((error) => console.log('分享失败:', error));
+                        });
+                    } else {
+                        shareButton.remove();
+                    }
+                </script>
+            </button>
+            <th:block th:with="speech = ${#annotations.getOrDefault(post, 'thyuu_post_speech','0')}">
+                <button th:if="${speech == '1'}" id="speech-btn" class="speech icon-voice" title="朗读这篇文章"></button>
+            </th:block>
+            <nav class="post-navigation" role="navigation"
+                 th:with="postCursor = ${postFinder.cursor(post.metadata.name)}">
+                <a class="button prev" role="button"
+                   th:if="${postCursor.hasPrevious()}" th:href="@{${postCursor.previous.status.permalink}}" rel="prev"></a>
+                <a class="button next" role="button"
+                   th:if="${postCursor.hasNext()}" th:href="@{${postCursor.next.status.permalink}}"  rel="next"></a>
+            </nav>
+        </div>
+    </hgroup>
+    <aside id="cover-map" class="thyuu-amaps amap-container"
+           th:if="${not #strings.isEmpty(locate) && not #strings.isEmpty(theme.config.global.amap_key)}">
+    </aside>
+</header>

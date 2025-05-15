@@ -1,0 +1,105 @@
+<main id="main" class="site-main" role="main" th:with="groups = ${linkFinder.groupBy()}">
+    <header class="page-header">
+        <h1 class="page-title fade-before">[[${theme.config.links.title}]]<em class="num"><span id="linkNum"></span>个</em></h1>
+        <div class="taxonomy-des fade-before" th:if="${!singlePage.spec.excerpt.autoGenerate}">
+            <p th:text="${singlePage.spec.excerpt.raw}"></p>
+        </div>
+        <nav class="taxonomy-nav fade-before">
+            <ul class="taxonomy-sub no-scrollbar card-sub active">
+                <th:block th:each="group,iterStat : ${groups}">
+                    <li th:if="${not #lists.isEmpty(group.spec.displayName)}">
+                        <a data-fancybox="div"
+                           th:data-src="'#'+${group.metadata.name}"
+                           th:data-slug="${group.metadata.name}"
+                           title="人间烟火">[[${group.spec.displayName}]] <span class="taxonomy-num">([[${group.links.size}]])</span></a>
+                    </li>
+                </th:block>
+            </ul>
+        </nav>
+    </header>
+    <article class="friend-tab page type-page hentry">
+        <section class="friend-link">
+            <th:block th:each="group,iterStat : ${groups}">
+                <div th:id="${group.metadata.name}"
+                     th:if="${#strings.equals(#annotations.get(group, 'mindscape_link_group_display_style'),'rss') && not #lists.isEmpty(group.links)}"
+                     class="linkcat">
+                    <hgroup class="link-nav">
+                        <h6 class="page-section-title" th:if="${not #lists.isEmpty(group.spec.displayName)}"
+                            th:text="${group.spec.displayName}"></h6>
+                        <th:block th:with="desc = ${#annotations.get(group, 'mindscape_link_group_desc')}">
+                            <span th:if="${not #lists.isEmpty(desc)}" th:text="${desc}"></span>
+                        </th:block>
+                    </hgroup>
+                    <ul class="link-items">
+                        <li  th:id="${link.metadata.name}" class="link-item fade-before" rating="0"
+                             th:each="link,iterStat : ${group.links}">
+                            <a class="link-card" th:href="${link.spec.url}"
+                               th:title="${link.spec.description}" target="_blank" role="button">
+                                <img th:alt="${link.spec.description}"
+                                     th:src="${'https://s0.wp.com/mshots/v1/'+link.spec.url+'?w=400&h=300'}"
+                                     class="link-bg" loading="lazy">
+                                <div class="link-info">
+                                    <img alt="" th:src="${link.spec.logo}"
+                                         class="avatar avatar-48 photo" height="48" width="48"
+                                         decoding="async">
+                                    <div class="link-cont">
+                                        <h6 class="link-name"
+                                            th:text="${link.spec.displayName}"></h6>
+                                        <div class="link-des" th:text="${link.spec.description}"></div>
+                                    </div>
+                                </div>
+                                <div class="note-time">
+                                    <!--鱼记得的第[[${iterStat.count}]]号恒星-->
+                                    <br>
+                                    该星球距离检测中
+                                </div>
+                            </a>
+                            <div class="link-rss">
+                                <div class="rss-no rss-list">
+                                    无 RSS 链接
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div th:id="${group.metadata.name}"
+                     th:if="${#strings.equals(#annotations.get(group, 'mindscape_link_group_display_style'),'default') && not #lists.isEmpty(group.links)}"
+                     class="linkcat"
+                     style="display: none;">
+                    <hgroup class="link-nav">
+                        <h6 class="link-title" th:if="${not #lists.isEmpty(group.spec.displayName)}"
+                            th:text="${group.spec.displayName}"></h6>
+                        <th:block th:with="desc = ${#annotations.get(group, 'mindscape_link_group_desc')}">
+                            <span th:if="${not #lists.isEmpty(desc)}" th:text="${desc}"></span>
+                        </th:block>
+                    </hgroup>
+                    <ul class="link-items">
+                        <li th:each="link,iterStat : ${group.links}" th:id="${link.metadata.name}" class="link-item" rating="0">
+                            <a class="link-card" th:href="${link.spec.url}"
+                               th:title="${link.spec.description}" target="_blank" role="button">
+                                <img th:alt="${link.spec.description}"
+                                     th:src="${'https://s0.wp.com/mshots/v1/'+link.spec.url+'?w=400&h=300'}"
+                                     class="link-bg" loading="lazy">
+                                <div class="link-info">
+                                    <img class="avatar" th:src="${link.spec.logo}" alt=""
+                                         loading="lazy">
+                                    <div class="link-cont">
+                                        <h6 class="link-name"
+                                            th:text="${link.spec.displayName}"></h6>
+                                        <div class="link-des" th:text="${link.spec.description}"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </th:block>
+        </section>
+        <th:block th:replace="~{macro/links/add-link}"/>
+    </article>
+    <nav class="navigation page-navigation" role="navigation">
+        <a class="button has-thyuu-color icon-add" data-fancybox="" data-src="#add" data-slug="add" role="button">
+            <span>添加友链</span>
+        </a>
+    </nav>
+</main>

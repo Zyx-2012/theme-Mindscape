@@ -1,0 +1,56 @@
+<aside class="aside-author">
+    <div class="authors"  th:with="author = ${contributorFinder.getContributor(post.owner.metadata.name)}">
+        <h6>本文作者·[[${post.owner.displayName}]]</h6>
+        <div class="has-line-clamp" th:text="${post.owner.bio}"></div>
+        <nav th:with="social_email=${#annotations.get(author, 'halo.run/email-to-verify')},
+                 social_qq=${#annotations.get(author, 'mindscape_user_social_qq')},
+                 social_weibo=${#annotations.get(author, 'mindscape_user_social_weibo')},
+                 social_wechat=${#annotations.get(author, 'mindscape_user_social_wechat')},
+                 social_douyin=${#annotations.get(author, 'mindscape_user_social_douyin')},
+                 social_github=${#annotations.get(author, 'mindscape_user_social_github')}">
+            <a role="button" target="_blank" class="button more-info icon-add" th:href="${post.owner.permalink}" rel="author">更多资料</a>
+            <a th:if="${not #strings.isEmpty(social_email)}" role="button" target="_blank" class="button icon-mail"
+               th:href="|mailto:${social_email}|"></a>
+            <a th:if="${not #strings.isEmpty(social_qq)}" role="button" class="button icon-qq" title="QQ账号"
+               th:href="|tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=${social_qq}|"
+               target="_blank"></a>
+            <a th:if="${not #strings.isEmpty(social_wechat)}" role="button" class="button icon-weixin" title="微信" data-fancybox="tip"
+               th:href="${social_wechat}"></a>
+            <a th:if="${not #strings.isEmpty(social_github)}" role="button" class="button icon-GitHub" title="GitHub"
+               th:href="|https://github.com/${social_github}|" target="_blank"></a>
+            <a th:if="${not #strings.isEmpty(social_weibo)}" role="button" class="button icon-weibo" title="微博"
+               th:href="|https://weibo.com/u/${social_weibo}|" target="_blank"></a>
+            <a th:if="${not #strings.isEmpty(social_douyin)}" role="button" class="button icon-douyin" title="抖音" data-fancybox="tip"
+               th:href="${social_douyin}"></a>
+        </nav>
+    </div>
+    <div class="avatars">
+        <img alt="" th:src="${post.owner.avatar}" class="avatar avatar-200 photo" height="200" width="200" loading="lazy" decoding="async">
+    </div>
+    <div class="article">
+        <h6>本文附加信息</h6>
+        <ul th:with="copyright = ${#annotations.getOrDefault(post, 'mindscape_post_copyright','1')},
+             timeliness = ${#annotations.getOrDefault(post, 'mindscape_post_timeliness','0')},
+             locate = ${#annotations.get(post, 'mindscape_post_locate')},
+             copyright_html = ${copyright != '0' ? 'has' : 'no'},
+             copyright_text = ${copyright != '0' ? '具有' : '公开'},
+             copyright_info = ${copyright != '0' ? '请您在转载、复制时注明本文作者、链接及内容来源信息。' : '本文作者开放版权性并可转载。'}">
+            <li th:class="|copyright icon-info ${copyright_html}|"
+                th:attr="text=${copyright_info}+'若涉及转载第三方内容，还需一同注明。'+${not #strings.isEmpty(locate) ? '本文使用的地图API和样式、数据来源于高德地图。' : ''}">
+                [[${copyright_text}]]版权性[[${not #strings.isEmpty(locate) ? '及三方API' : ''}]]
+            </li>
+            <li th:if="${timeliness == '1'}" class="timelines icon-time has" th:attr="text='文章内容具有时效性，无法保证超出最近更新时间（'+${#dates.format(post.status.lastModifyTime,'yyyy年MM月dd日')}+'）范围外的准确性，还请您酌情参考。若文章内容有错误之处，请您批评指正。'">具有时效性</li>
+            <li th:unless="${timeliness == '1'}" class="timelines icon-time no" text="文章内容不具时效性。若文章内容有错误之处，请您批评指正。">不具时效性</li>
+        </ul>
+        <nav th:with="postCursor = ${postFinder.cursor(post.metadata.name)}">
+            <a th:if="${postCursor.hasPrevious()}" th:href="@{${postCursor.previous.status.permalink}}" rel="prev">
+                <i class="thyuu-icon icon-left">上一篇</i>
+                <span class="has-line-clamp" th:text="${postCursor.previous.spec.title}"></span>
+            </a>
+            <a th:if="${postCursor.hasNext()}" th:href="@{${postCursor.next.status.permalink}}" rel="next">
+                <i class="thyuu-icon icon-right">下一篇</i>
+                <span class="has-line-clamp" th:text="${postCursor.next.spec.title}"></span>
+            </a>
+        </nav>
+    </div>
+</aside>

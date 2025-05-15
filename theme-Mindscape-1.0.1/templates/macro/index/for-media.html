@@ -1,0 +1,43 @@
+<th:block th:fragment="for-media(posts_nums,cates_title,posts_form,posts_id)">
+    <section th:if="${posts_nums > 0}" class="for-media"
+             th:classappend="${posts_form == 'gallery' ? 'post-format-image post-format-gallery' : 'post-format-'+posts_form}">
+        <hgroup class="part-title" th:with="cates_title_state = ${ not #lists.isEmpty(posts_id) ? '精选' : '最新' }">
+            <h2><i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path fill="currentColor" d="M100 0c3.395 53.76 46.24 96.605 100 100-53.76 3.395-96.605 46.24-100 100-3.395-53.76-46.24-96.605-100-100C53.76 96.605 96.605 53.76 100 0Z"></path></svg></i>[[${cates_title_state + cates_title}]]</h2>
+        </hgroup>
+        <ul class="post-list snap-style no-scrollbar"
+            th:with="posts = ${thyuuXingduPostFinder.list({
+            page: 1,
+            size: posts_nums,
+            names: posts_id,
+            types: not #lists.isEmpty(posts_id) ?  null : posts_form == 'gallery' ? {'gallery','image'} : {posts_form},
+            sort: {'spec.publishTime,desc', 'metadata.creationTimestamp,asc'}
+            })}">
+            <li class="post fade-before" th:each="post : ${posts.items}">
+                <figure>
+                    <img th:unless="${#strings.isEmpty(post.spec.cover)}"
+                         width="128"
+                         height="72"
+                         th:src="${thumbnail.gen(post.spec.cover, 'm')}"
+                         class="attachment-thumbnail size-thumbnail"
+                         alt=""
+                         decoding="async">
+                    <div th:if="${#strings.isEmpty(post.spec.cover)}" class="no-thumbnail"></div>
+                </figure>
+                <article>
+                    <h6 class="post-title line-clamp">
+                        <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}"></a>
+                    </h6>
+                    <div class="post-meta font-small">
+                        <time class="thyuu-icon icon-calendar" th:datetime="${post.spec.publishTime}"><th:block th:replace="~{modules/widgets/time :: time(${post.spec.publishTime})}"></th:block></time>
+                        <span class="thyuu-icon icon-heats" th:text="|${post.stats.visit}°|"></span>
+                        <span class="thyuu-icon icon-pinglun-title">
+                          <a th:href="|@{${post.status.permalink}}#comments|" th:text="${post.stats.comment > 0 ? post.stats.comment+'条' : '来说一句'}"></a>
+                        </span>
+                    </div>
+                    <a class="read-more" th:href="@{${post.status.permalink}}" target="_blank" role="button"></a>
+                </article>
+            </li>
+        </ul>
+    </section>
+</th:block>
+
